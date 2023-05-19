@@ -97,7 +97,7 @@ _All projects are prefixed with `Oiski.School.THOP`_
     <thead>
         <tr>
             <th>Topic</th>
-            <th>Input</th>
+            <th>Sample</th>
             <th>Description</th>
         </tr>
     </thead>
