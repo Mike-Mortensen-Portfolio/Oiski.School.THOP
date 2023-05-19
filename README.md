@@ -1,10 +1,10 @@
 <div align="center">
     <img src="/Diagrams/Images/pngwing.com.png" alt="Header_Image" width="300px" height="300px"/>
 </div>
-<h1 align="center">
-    <span style="display:block;">THOP</span>
-    <span style="display:block;font-weight:normal; font-size:20px;">Temperature and Humidity Observation Program </span>
-</h1>
+<div align="center">
+    <strong style="font-size:30px; display:block;">THOP</strong>
+    <p style="display:block; font-weight:normal; font-size:20px;">Temperature and Humidity Observation Program </p>
+</div>
 
 ## Introduction
 The <span style="color:#8fc7ae">Temperature and Humidity Observation Program</span> or <span style="color:#8fc7ae">THOP</span> for short, is written for my 5th year _App Programming III_ course examn.
@@ -12,7 +12,8 @@ It's composed of 3 parts; A mobile application, .NET RestApi and an embedded sys
 The idea is to have the embedded system read humidex data from a sensor and push it to the RestApi
 through the **MQTT protocol**. The Api will then store it in an InfluxDB.
 The Mobile application will pull this data and display it using a graph (_See [architecture](#thop-architecture)_).
-<hr/>
+
+---
 
 ## Projects
 _All projects are prefixed with `Oiski.School.THOP`_
@@ -23,17 +24,17 @@ _All projects are prefixed with `Oiski.School.THOP`_
 | `Api` | <img style="vertical-align: bottom;" src="/Diagrams/Images/RestApi_Client.png" width="25px" /> .NET RESTApi | C# | | InfluxDB |
 | `Humidex` | <img style="vertical-align: bottom;" src="/Diagrams/Images/MKR1010_Client.png" width="25px" /> Arduino MKR WiFi 1010 | C++ | | `Api` |
 
-<hr/>
+---
 
 ## THOP Architecture
 ![Architecture_Diagram](/Diagrams/Architecture_Diagram.drawio.png)
 
-<hr/>
+---
 
 ## THOP Sensor Circuit
 ![Circuit_Diagram](/Diagrams/Circuit_Diagram.drawio.png)
 
-<hr/>
+---
 
 ## Endpoints
 <table>
@@ -92,7 +93,7 @@ _All projects are prefixed with `Oiski.School.THOP`_
 </tbody>
 </table>
 
-<hr/>
+---
 
 ## Topics
 <table>
@@ -143,7 +144,7 @@ _All projects are prefixed with `Oiski.School.THOP`_
 </tr>
 </tbody>
 </table>
-<hr/>
+---
 
 ## Initial Features
 - - [ ] Can display actual reading (_latest readings_) for temperature, humidity and the timestamp for when the reading was recorded
@@ -158,7 +159,7 @@ _All projects are prefixed with `Oiski.School.THOP`_
 - - [ ] The ability to switch between telemetry context. Ex. from different parts of a house.
 - - [ ] The ability to register an alarm that will push a notification if the temperature exceeds a given limit
 
-<hr/>
+---
 
 # Standards
 - **Versioning**
@@ -190,7 +191,7 @@ _All projects are prefixed with `Oiski.School.THOP`_
   - `Properties` must be _public_, _protected_ or _internal_.
   - `Interfaces` must have their own subfolder, which should never be included in their `namespace`.
 
-<hr/>
+---
 
 ## Change Log
  - **[v0.0.0](LinkToGitHubTag)**
