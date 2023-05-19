@@ -29,10 +29,14 @@ _All projects are prefixed with `Oiski.School.THOP`_
 ## THOP Architecture
 ![Architecture_Diagram](/Diagrams/Architecture_Diagram.drawio.png)
 
+<p align="right"><strong><a href="#introduction">^ To Top ^</a></strong></p>
+
 ---
 
 ## THOP Sensor Circuit
 ![Circuit_Diagram](/Diagrams/Circuit_Diagram.drawio.png)
+
+<p align="right"><strong><a href="#introduction">^ To Top ^</a></strong></p>
 
 ---
 
@@ -93,6 +97,8 @@ _All projects are prefixed with `Oiski.School.THOP`_
 </tbody>
 </table>
 
+<p align="right"><strong><a href="#introduction">^ To Top ^</a></strong></p>
+
 ---
 
 ## Topics
@@ -144,6 +150,9 @@ _All projects are prefixed with `Oiski.School.THOP`_
 </tr>
 </tbody>
 </table>
+
+<p align="right"><strong><a href="#introduction">^ To Top ^</a></strong></p>
+
 ---
 
 ## Initial Features
@@ -158,6 +167,8 @@ _All projects are prefixed with `Oiski.School.THOP`_
 ## Optional Features
 - - [ ] The ability to switch between telemetry context. Ex. from different parts of a house.
 - - [ ] The ability to register an alarm that will push a notification if the temperature exceeds a given limit
+
+<p align="right"><strong><a href="#introduction">^ To Top ^</a></strong></p>
 
 ---
 
@@ -191,6 +202,8 @@ _All projects are prefixed with `Oiski.School.THOP`_
   - `Properties` must be _public_, _protected_ or _internal_.
   - `Interfaces` must have their own subfolder, which should never be included in their `namespace`.
 
+  <p align="right"><strong><a href="#introduction">^ To Top ^</a></strong></p>
+
 ---
 
 ## Change Log
@@ -201,3 +214,5 @@ _All projects are prefixed with `Oiski.School.THOP`_
      - _List the areas that were altered in any way in this version_
    - **Fixed**
      - _List the bugs that were fixed in this version_
+
+<p align="right"><strong><a href="#introduction">^ To Top ^</a></strong></p>
