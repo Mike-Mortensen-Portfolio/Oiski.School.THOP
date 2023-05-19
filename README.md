@@ -1,5 +1,7 @@
-<img style="text-align:center; display:block; margin-left:auto; margin-right:auto; width:35%;" src="/Diagrams/Images/pngwing.com.png" alt="Header_Image"/>
-<h1 style="text-align:center;">
+<div align="center">
+    <img src="/Diagrams/Images/pngwing.com.png" alt="Header_Image" width="300px" height="300px"/>
+</div>
+<h1 align="center">
     <span style="display:block;">THOP</span>
     <span style="display:block;font-weight:normal; font-size:20px;">Temperature and Humidity Observation Program </span>
 </h1>
