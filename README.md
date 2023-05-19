@@ -1,4 +1,4 @@
-<img style="text-align:center; display:block; margin-left:auto; margin-right:auto; width:35%;" src="../Diagrams/Images/pngwing.com.png" alt="Header_Image"/>
+<img style="text-align:center; display:block; margin-left:auto; margin-right:auto; width:35%;" src="/Diagrams/Images/pngwing.com.png" alt="Header_Image"/>
 <h1 style="text-align:center;">
     <span style="display:block;">THOP</span>
     <span style="display:block;font-weight:normal; font-size:20px;">Temperature and Humidity Observation Program </span>
@@ -17,9 +17,9 @@ _All projects are prefixed with `Oiski.School.THOP`_
 
 | Project | Platform | Language | Timeframe | Backend Store |
 |---------|----------|----------|-----------|---------------|
-| `App` | <img style="vertical-align: bottom;" src="../Diagrams/Images/MAUI_Client.png" width="25px" /> NET MAUI | C# | _17.05.23_ - _24.05.23_ | `Api` |
-| `Api` | <img style="vertical-align: bottom;" src="../Diagrams/Images/RestApi_Client.png" width="25px" /> .NET RESTApi | C# | | InfluxDB |
-| `Humidex` | <img style="vertical-align: bottom;" src="../Diagrams/Images/MKR1010_Client.png" width="25px" /> Arduino MKR WiFi 1010 | C++ | | `Api` |
+| `App` | <img style="vertical-align: bottom;" src="/Diagrams/Images/MAUI_Client.png" width="25px" /> NET MAUI | C# | _17.05.23_ - _24.05.23_ | `Api` |
+| `Api` | <img style="vertical-align: bottom;" src="/Diagrams/Images/RestApi_Client.png" width="25px" /> .NET RESTApi | C# | | InfluxDB |
+| `Humidex` | <img style="vertical-align: bottom;" src="/Diagrams/Images/MKR1010_Client.png" width="25px" /> Arduino MKR WiFi 1010 | C++ | | `Api` |
 
 <hr/>
 
@@ -112,7 +112,7 @@ _All projects are prefixed with `Oiski.School.THOP`_
 {
     "locationId": "home",
     "deviceId":"ArduinoMKR1010",
-    "vents":"on
+    "vents":"on"
 }
 ```
 
