@@ -8,8 +8,8 @@
 The <span style="color:#8fc7ae">Temperature and Humidity Observation Program</span> or <span style="color:#8fc7ae">THOP</span> for short, is written for my 5th year _App Programming III_ course examn.
 It's composed of 3 parts; A mobile application, .NET RestApi and an embedded system.
 The idea is to have the embedded system read humidex data from a sensor and push it to the RestApi
-through the **MQTT protocol*`*. The Api will then store it in an InfluxDB.
-The Mobile application will pull this data and display it using a graph (_See [architecture](#architecture)_).
+through the **MQTT protocol**. The Api will then store it in an InfluxDB.
+The Mobile application will pull this data and display it using a graph (_See [architecture](#thop-architecture)_).
 <hr/>
 
 ## Projects
@@ -24,12 +24,12 @@ _All projects are prefixed with `Oiski.School.THOP`_
 <hr/>
 
 ## THOP Architecture
-![Architecture_Diagram](../Diagrams/Architecture_Diagram.drawio.png)
+![Architecture_Diagram](/Diagrams/Architecture_Diagram.drawio.png)
 
 <hr/>
 
 ## THOP Sensor Circuit
-![Circuit_Diagram](../Diagrams/Circuit_Diagram.drawio.png)
+![Circuit_Diagram](/Diagrams/Circuit_Diagram.drawio.png)
 
 <hr/>
 
