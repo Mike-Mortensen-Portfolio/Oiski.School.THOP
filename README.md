@@ -117,8 +117,7 @@ _All projects are prefixed with `Oiski.School.THOP`_
 ```
 
 <td>
-    Turn the vents controlled by &lt;<i>deviceId</i>&gt; on or off
-</td>
+    Publish to this topic to control peripherals controlled by &lt;<i>deviceId</i>&gt;
 </tr>
 <tr>
 <td>
