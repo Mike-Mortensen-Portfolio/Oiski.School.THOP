@@ -194,8 +194,8 @@ _All projects are prefixed with `Oiski.School.THOP`_
       > Example: v0.55.15-Rel -> v1.0.0-Rel | v0.99.56-Dev -> v0.99.0-Dev
 - **Source Control**
     - `Features` must be branched out and developed on an isolated branch and merged back into the `Developer` branch when done.
-    - `Branches` must be named as follows: *[MajorVersion]/[YouInitials]/[FeatureName]*.
-      > Example: v0/MSM/ExampleBranch.
+    - `Branches` must be all lowercase, seperating words by dashes and named as follows: *[MajorVersion]/[YouInitials]/[FeatureName]*.
+      > Example: v0/msm/example-branch.
 - **Code**
   - `Namespaces` must be constructed as follows: _Oiski.[ProjectName].[FolderName]_.
   - `Fields` must be _private_ or _protected_.
