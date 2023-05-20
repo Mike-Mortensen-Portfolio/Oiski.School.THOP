@@ -1,5 +1,4 @@
 ﻿using InfluxDB.Client;
-using InfluxDB.Client.Core.Flux.Domain;
 using InfluxDB.Client.Linq;
 using System.Text;
 
@@ -50,10 +49,10 @@ namespace Oiski.School.THOP.Api.Services.Influx
             _logger.LogInformation("Data Written");
         }
 
-        public async Task<Dictionary<string, List<string>>> ReadAsync(string bucket)
+        public async Task<Dictionary<string, List<string>>> ReadAsGroups()
         {
             var data = new Dictionary<string, List<string>>();
-            var flux = $"from(bucket:\"{bucket}\") |> range (start: 0)";
+            var flux = $"from(bucket:\"{_bucketName}\") |> range (start: 0)";
 
             using var client = new InfluxDBClient(_url, _token);
 

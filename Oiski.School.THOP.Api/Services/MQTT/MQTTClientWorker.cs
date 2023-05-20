@@ -1,10 +1,8 @@
 ﻿using MQTTnet.Client;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Oiski.School.THOP.Api.Services.DataContainers;
 using Oiski.School.THOP.Api.Services.Influx;
 using System.Globalization;
-using System.Security.Policy;
 
 namespace Oiski.School.THOP.Api.Services.MQTT
 {

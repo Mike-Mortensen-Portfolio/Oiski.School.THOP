@@ -1,10 +1,8 @@
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Oiski.School.THOP.Api.Services.DataContainers;
 using Oiski.School.THOP.Api.Services.Influx;
 using Oiski.School.THOP.Api.Services.MQTT;
-using System.Linq;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +16,7 @@ builder.Services.AddSingleton((provider) =>
     return new MyMQTTClient(Console.WriteLine);
 });
 builder.HookMQTTWorker();
+builder.Services.AddCors();
 
 var app = builder.Build();
 
@@ -29,6 +28,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(options =>
+{
+    options.AllowAnyOrigin();
+});
 
 app.MapGet("thop/humidex", async ([AsParameters] HumidexFilter filter, InfluxService service) =>
 {

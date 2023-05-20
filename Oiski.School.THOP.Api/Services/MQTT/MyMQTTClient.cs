@@ -104,7 +104,6 @@ namespace Oiski.School.THOP.Api.Services.MQTT
             _client.ApplicationMessageReceivedAsync += (e) =>
             {
                 _logger?.Invoke($"Message recieved:");
-
                 handler(e.GetPayload());
 
                 return Task.CompletedTask;
