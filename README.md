@@ -15,6 +15,19 @@ The Mobile application will pull this data and display it using a graph (_See [a
 
 ---
 
+## Table of Contents
+- [Projects](#projects)
+- [THOP Architecture](#thop-architecture)
+- [THOP Sensor Circuit](#thop-sensor-circuit)
+- [Endpoints](#endpoints)
+- [Topics](#topics)
+- [Features](#features)
+    - [Optional Features](#optional-features)
+- [Standards](#standards)
+- [Change Log](#change-log)
+
+---
+
 ## Projects
 _All projects are prefixed with `Oiski.School.THOP`_
 
@@ -164,7 +177,7 @@ _All projects are prefixed with `Oiski.School.THOP`_
 - - [ ] Can display latest data if disconnected
 - - [ ] Should be able to handle unstable internet connection
 
-## Optional Features
+### Optional Features
 - - [ ] The ability to switch between telemetry context. Ex. from different parts of a house.
 - - [ ] The ability to register an alarm that will push a notification if the temperature exceeds a given limit
 
