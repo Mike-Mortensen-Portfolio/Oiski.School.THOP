@@ -23,6 +23,15 @@ namespace Oiski.School.THOP.Api.Services.Influx
             _logger = logger;
         }
 
+        /// <summary>
+        /// Write data into the influx database <paramref name="table"/> as a collection of <see cref="KeyValuePair{TKey, TValue}"/> <see langword="objects"/>
+        /// <br/>
+        /// <strong>Note:</strong> This will format everything that can't be parsed as a <see langword="double"/>, as a <see langword="string"/>
+        /// </summary>
+        /// <param name="table"></param>
+        /// <param name="tag"></param>
+        /// <param name="data"></param>
+        /// <returns></returns>
         public async Task WriteAsync(string table, KeyValuePair<string, string> tag, params KeyValuePair<string, string>[] data)
         {
             _logger.LogInformation("Writing data to: {Bucket}", _bucketName);

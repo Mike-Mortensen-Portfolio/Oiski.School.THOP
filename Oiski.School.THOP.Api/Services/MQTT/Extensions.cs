@@ -6,6 +6,12 @@ namespace Oiski.School.THOP.Api.Services.MQTT
 {
     public static class Extensions
     {
+        /// <summary>
+        /// Dump <paramref name="obj"/> to the <see cref="Console"/> as a <strong>JSON</strong> <see langword="object"/>
+        /// </summary>
+        /// <typeparam name="TObject"></typeparam>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public static TObject DumpToConsole<TObject>(this TObject obj)
         {
             var output = "NULL";
@@ -25,6 +31,13 @@ namespace Oiski.School.THOP.Api.Services.MQTT
             Console.WriteLine(args.GetPayload());
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="args"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="NullReferenceException"></exception>
         public static string GetPayload(this MqttApplicationMessageReceivedEventArgs args)
         {
             if (args == null)
@@ -39,6 +52,10 @@ namespace Oiski.School.THOP.Api.Services.MQTT
             return payload;
         }
 
+        /// <summary>
+        /// Add the <see cref="MyMQTTClient"/> as a hosted service
+        /// </summary>
+        /// <param name="builder"></param>
         public static void HookMQTTWorker(this WebApplicationBuilder builder)
         {
             builder.Services.AddHostedService<MQTTClientWorker>();

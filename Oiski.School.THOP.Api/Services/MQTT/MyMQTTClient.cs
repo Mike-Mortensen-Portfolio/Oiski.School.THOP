@@ -34,6 +34,12 @@ namespace Oiski.School.THOP.Api.Services.MQTT
             GC.SuppressFinalize(this);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="broker"></param>
+        /// <returns></returns>
+        /// <exception cref="NullReferenceException"></exception>
         public async Task<MqttClientConnectResultCode> Connect(string broker)
         {
             if (_client == null)
@@ -51,6 +57,16 @@ namespace Oiski.School.THOP.Api.Services.MQTT
 
             return result.ResultCode;
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="broker"></param>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        /// <exception cref="NullReferenceException"></exception>
+        /// <exception cref="InvalidDataException"></exception>
         public async Task<MqttClientConnectResultCode> ConnectWithTLS(string broker, string username, string password)
         {
             if (_client == null)
@@ -75,6 +91,11 @@ namespace Oiski.School.THOP.Api.Services.MQTT
             return result.ResultCode;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="handler"></param>
+        /// <exception cref="NullReferenceException"></exception>
         public void HandleMessage(Action<string> handler)
         {
             if (_client == null)
@@ -90,6 +111,13 @@ namespace Oiski.School.THOP.Api.Services.MQTT
             };
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="topic"></param>
+        /// <param name="qualityOfService"></param>
+        /// <returns></returns>
+        /// <exception cref="NullReferenceException"></exception>
         public async Task SubAsync(string topic, MqttQualityOfServiceLevel qualityOfService = MqttQualityOfServiceLevel.AtLeastOnce)
         {
             if (_factory == null)
@@ -111,6 +139,15 @@ namespace Oiski.School.THOP.Api.Services.MQTT
             _logger?.Invoke($"Sub status: {result.Items.First().ResultCode}");
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="topic"></param>
+        /// <param name="payload"></param>
+        /// <param name="qualityOfService"></param>
+        /// <param name="retain"></param>
+        /// <returns></returns>
+        /// <exception cref="NullReferenceException"></exception>
         public async Task<MqttClientPublishResult> PubAsync(string topic, string payload, MqttQualityOfServiceLevel qualityOfService = MqttQualityOfServiceLevel.AtLeastOnce, bool retain = false)
         {
             if (topic == null)
