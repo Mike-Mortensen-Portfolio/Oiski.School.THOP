@@ -53,7 +53,7 @@ _All projects are prefixed with `Oiski.School.THOP`_
 <tbody>
 <tr>
 <td>
-    telemetry/ventilation
+    thop/ventilation
 </td>
 <td>
     <code>POST</code>
@@ -74,7 +74,7 @@ _All projects are prefixed with `Oiski.School.THOP`_
 </tr>
 <tr>
 <td>
-    telemetry/climate
+    thop/humidex
 </td>
 <td>
     <code>GET</code>
@@ -121,7 +121,7 @@ _All projects are prefixed with `Oiski.School.THOP`_
 {
     "locationId": "home",
     "deviceId":"ArduinoMKR1010",
-    "vents":"on"
+    "on": true
 }
 ```
 
@@ -159,7 +159,7 @@ _All projects are prefixed with `Oiski.School.THOP`_
 - - [ ] Can display actual reading (_latest readings_) for temperature, humidity and the timestamp for when the reading was recorded
 - - [ ] Can display a graph of the readings
     - - [ ] Should be able to pick between latest time, day or week.
-- - [ ] A button should be able to simulate a opening a window or ventilation (_via MQTT and a servo peripheral_)
+- - [ ] A button should be able to simulate opening a window or ventilation (_via MQTT and a servo peripheral_)
 - - [ ] Mobile app should be structured using MVVM design priciples and Dependency Injection
 - - [ ] Can display latest data if disconnected
 - - [ ] Should be able to handle unstable internet connection
