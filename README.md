@@ -15,6 +15,19 @@ The Mobile application will pull this data and display it using a graph (_See [a
 
 ---
 
+## Table of Contents
+- [Projects](#projects)
+- [THOP Architecture](#thop-architecture)
+- [THOP Sensor Circuit](#thop-sensor-circuit)
+- [Endpoints](#endpoints)
+- [Topics](#topics)
+- [Features](#features)
+    - [Optional Features](#optional-features)
+- [Standards](#standards)
+- [Change Log](#change-log)
+
+---
+
 ## Projects
 _All projects are prefixed with `Oiski.School.THOP`_
 
@@ -53,7 +66,7 @@ _All projects are prefixed with `Oiski.School.THOP`_
 <tbody>
 <tr>
 <td>
-    telemetry/ventilation
+    thop/ventilation
 </td>
 <td>
     <code>POST</code>
@@ -74,7 +87,7 @@ _All projects are prefixed with `Oiski.School.THOP`_
 </tr>
 <tr>
 <td>
-    telemetry/climate
+    thop/humidex
 </td>
 <td>
     <code>GET</code>
@@ -121,7 +134,7 @@ _All projects are prefixed with `Oiski.School.THOP`_
 {
     "locationId": "home",
     "deviceId":"ArduinoMKR1010",
-    "vents":"on"
+    "on": true
 }
 ```
 
@@ -159,12 +172,12 @@ _All projects are prefixed with `Oiski.School.THOP`_
 - - [ ] Can display actual reading (_latest readings_) for temperature, humidity and the timestamp for when the reading was recorded
 - - [ ] Can display a graph of the readings
     - - [ ] Should be able to pick between latest time, day or week.
-- - [ ] A button should be able to simulate a opening a window or ventilation (_via MQTT and a servo peripheral_)
+- - [ ] A button should be able to simulate opening a window or ventilation (_via MQTT and a servo peripheral_)
 - - [ ] Mobile app should be structured using MVVM design priciples and Dependency Injection
 - - [ ] Can display latest data if disconnected
 - - [ ] Should be able to handle unstable internet connection
 
-## Optional Features
+### Optional Features
 - - [ ] The ability to switch between telemetry context. Ex. from different parts of a house.
 - - [ ] The ability to register an alarm that will push a notification if the temperature exceeds a given limit
 
