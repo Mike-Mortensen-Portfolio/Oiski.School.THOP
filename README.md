@@ -46,7 +46,8 @@ _All projects are prefixed with `Oiski.School.THOP`_
         <tr>
             <th>Endpoint</th>
             <th>Type</th>
-            <th>Sample</th>
+            <th>Request Body</th>
+            <th>Response Body</th>
             <th>Description</th>
         </tr>
     </thead>
@@ -68,6 +69,7 @@ _All projects are prefixed with `Oiski.School.THOP`_
 }
 ```
 
+<td><!--Empty--></td>
 <td>
     Turn on the vents controlled by &lt;<i>deviceId</i>&gt; at &lt;<i>locationId</i>&gt;
 </td>
@@ -79,6 +81,9 @@ _All projects are prefixed with `Oiski.School.THOP`_
 <td>
     <code>GET</code>
 </td>
+
+<td><!--Empty--></td>
+
 <td>
 
 ```json
@@ -155,16 +160,16 @@ _All projects are prefixed with `Oiski.School.THOP`_
 
 ---
 
-## Initial Features
+## Requirements
 - - [ ] Can display actual reading (_latest readings_) for temperature, humidity and the timestamp for when the reading was recorded
 - - [ ] Can display a graph of the readings
     - - [ ] Should be able to pick between latest time, day or week.
 - - [ ] A button should be able to simulate a opening a window or ventilation (_via MQTT and a servo peripheral_)
-- - [ ] Mobile app should be structured using MVVM design priciples and Dependency Injection
+- - [X] Mobile app should be structured using MVVM design priciples and Dependency Injection
 - - [ ] Can display latest data if disconnected
 - - [ ] Should be able to handle unstable internet connection
 
-## Optional Features
+## Optional Requirements
 - - [ ] The ability to switch between telemetry context. Ex. from different parts of a house.
 - - [ ] The ability to register an alarm that will push a notification if the temperature exceeds a given limit
 
