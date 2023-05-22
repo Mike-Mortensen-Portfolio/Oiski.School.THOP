@@ -1,41 +1,93 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Oiski.School.THOP.App.Views.MainPage">
+             x:Class="Oiski.School.THOP.App.Views.MainPage"
+             xmlns:viewModels="clr-namespace:Oiski.School.THOP.App.ViewModels"
+             x:DataType="viewModels:MainPageViewModel">
 
-    <ScrollView>
-        <VerticalStackLayout
-            Spacing="25"
-            Padding="30,0"
-            VerticalOptions="Center">
+    <RefreshView IsRefreshing="{Binding IsBusy}"
+                 Command="{Binding RefreshCommand}">
+        <ScrollView>
+            <VerticalStackLayout Margin="0,20,0,0"
+                                 Spacing="25"
+                                 Padding="30,0"
+                                 VerticalOptions="Start">
 
-            <Image
-                Source="dotnet_bot.png"
-                SemanticProperties.Description="Cute dot net bot waving hi to you!"
-                HeightRequest="200"
-                HorizontalOptions="Center" />
+                <Frame BackgroundColor="{StaticResource Gray600}">
+                    <Grid RowDefinitions="auto, auto, auto"
+                          ColumnDefinitions=".5*, .5*"
+                          RowSpacing="10"
+                          ColumnSpacing="10">
 
-            <Label
-                Text="Hello, World!"
-                SemanticProperties.HeadingLevel="Level1"
-                FontSize="32"
-                HorizontalOptions="Center" />
+                        <Label Text="Latest Readings"
+                           FontSize="Subtitle"
+                           HorizontalOptions="CenterAndExpand"
+                           HorizontalTextAlignment="Center"
+                           FontAttributes="Bold"
+                           Grid.Row="0"
+                           Grid.Column="0"
+                           Grid.ColumnSpan="2"/>
+                        <Frame Grid.Row="1"
+                               Grid.Column="0"
+                               BorderColor="{StaticResource Secondary}"
+                               BackgroundColor="Transparent">
+                            <Label Text="25.6°C"
+                                   TextColor="{StaticResource Tertiary}"
+                                   FontSize="20"
+                                   HorizontalOptions="CenterAndExpand"
+                                   HorizontalTextAlignment="Center"
+                                   FontAttributes="Bold"/>
+                        </Frame>
 
-            <Label
-                Text="Welcome to .NET Multi-platform App UI"
-                SemanticProperties.HeadingLevel="Level2"
-                SemanticProperties.Description="Welcome to dot net Multi platform App U I"
-                FontSize="18"
-                HorizontalOptions="Center" />
+                        <Frame Grid.Row="1"
+                               Grid.Column="1"
+                               BorderColor="{StaticResource Secondary}"
+                               BackgroundColor="Transparent">
+                            <Label Text="44.4% RH"
+                                   TextColor="{StaticResource Tertiary}"
+                                   FontSize="20"
+                                   HorizontalOptions="CenterAndExpand"
+                                   HorizontalTextAlignment="Center"
+                                   FontAttributes="Bold"
+                           />
+                        </Frame>
 
-            <Button
-                x:Name="CounterBtn"
-                Text="Click me"
-                SemanticProperties.Hint="Counts the number of times you click"
-                Clicked="OnCounterClicked"
-                HorizontalOptions="Center" />
+                        <Label Text="Pull page to refresh readings"
+                               TextColor="{StaticResource Gray500}"
+                               HorizontalOptions="CenterAndExpand"
+                               Grid.Row="2"
+                               Grid.Column="0"
+                               Grid.ColumnSpan="2"/>
+                    </Grid>
+                </Frame>
 
-        </VerticalStackLayout>
-    </ScrollView>
+                <Frame BackgroundColor="{StaticResource Gray600}">
+                    <Grid RowDefinitions="*,*"
+                          ColumnDefinitions=".5*, .5*"
+                          RowSpacing="10"
+                          ColumnSpacing="10">
+                        <Label Text="Peripherals"
+                               FontSize="Subtitle"
+                               HorizontalOptions="CenterAndExpand"
+                               FontAttributes="Bold"
+                               Grid.Row="0"
+                               Grid.Column="0"
+                               Grid.ColumnSpan="2"/>
+                        <Label Text="Ventilation:"
+                               TextColor="{StaticResource Tertiary}"
+                               HorizontalOptions="CenterAndExpand"
+                               VerticalOptions="CenterAndExpand"
+                               Grid.Row="1"
+                               Grid.Column="0"/>
+                        <Switch Grid.Row="1"
+                                Grid.Column="1"
+                                HorizontalOptions="CenterAndExpand"
+                                VerticalOptions="CenterAndExpand"
+                                IsToggled="{Binding VentilationOn}"/>
+                    </Grid>
+                </Frame>
 
+            </VerticalStackLayout>
+        </ScrollView>
+    </RefreshView>
 </ContentPage>

@@ -19,7 +19,9 @@ namespace Oiski.School.THOP.App
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
             builder.Services.AddSingleton<GraphPage>();
+            builder.Services.AddSingleton<MainPage>();
             builder.Services.AddTransient<GraphViewModel>();
+            builder.Services.AddTransient<MainPageViewModel>();
             builder.Services.AddHttpClient();
 
 #if DEBUG
