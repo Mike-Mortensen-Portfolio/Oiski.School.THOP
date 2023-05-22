@@ -12,7 +12,7 @@ namespace Oiski.School.THOP.App.ViewModels
     public partial class GraphViewModel : ObservableObject
     {
         [ObservableProperty]
-        private QuickAction _quickAction;
+        private QuickAction _quickActionFlag;
 
         [ObservableProperty]
         private GraphFilter _filter = new()
@@ -21,43 +21,24 @@ namespace Oiski.School.THOP.App.ViewModels
             EndDate = DateTime.Now
         };
 
+        #region Series Configuration
         [ObservableProperty]
         private ISeries[] _series =
         {
-            new LineSeries<ObservablePoint>
+            new LineSeries<DateTimePoint>
             {
-                Values = new ObservablePoint[]
+                Name = "Dummy",
+                Values = new DateTimePoint[]
                 {
-                    new ObservablePoint(0, 4),
-                    new ObservablePoint(1, 3),
-                    new ObservablePoint(3, 8),
-                    new ObservablePoint(18, 6),
-                    new ObservablePoint(20, 12)
-                }
-            },
-            new LineSeries<ObservablePoint>
-            {
-                Values = new ObservablePoint[]
-                {
-                    new ObservablePoint(0, 4),
-                    new ObservablePoint(2, 67),
-                    new ObservablePoint(18, 33),
-                    new ObservablePoint(20, 2),
-                    new ObservablePoint(43, 65)
-                }
-            },
-            new LineSeries<ObservablePoint>
-            {
-                Values = new ObservablePoint[]
-                {
-                    new ObservablePoint(3, 0),
-                    new ObservablePoint(12, 98),
-                    new ObservablePoint(21, 8),
-                    new ObservablePoint(45, 6),
-                    new ObservablePoint(66, 87)
+                    new DateTimePoint(DateTime.Now.AddDays (-5), 1),
+                    new DateTimePoint(DateTime.Now.AddDays (-4), 2),
+                    new DateTimePoint(DateTime.Now.AddDays (-3), 3),
+                    new DateTimePoint(DateTime.Now.AddDays (-2), 4),
+                    new DateTimePoint(DateTime.Now.AddDays (-1), 5)
                 }
             }
         };
+        #endregion
 
         #region Axis Configuration
         [ObservableProperty]
@@ -69,7 +50,8 @@ namespace Oiski.School.THOP.App.ViewModels
                 NamePaint = new SolidColorPaint (SKColors.Cyan),
                 LabelsPaint = new SolidColorPaint (SKColors.DarkCyan),
                 NameTextSize = 40,
-                TextSize = 30
+                TextSize = 30,
+                Labeler = (value) => new DateTime ((long)value).ToString("yy/MM/dd HH:mm")
             }
         };
 
@@ -96,9 +78,9 @@ namespace Oiski.School.THOP.App.ViewModels
         [RelayCommand]
         public void QuickActionInput(QuickAction action)
         {
-            QuickAction = action;
+            QuickActionFlag = action;
 
-            switch (QuickAction)
+            switch (QuickActionFlag)
             {
                 case QuickAction.Minutes60:
                     Filter.StartDate = DateTime.Now.AddMinutes(-60);

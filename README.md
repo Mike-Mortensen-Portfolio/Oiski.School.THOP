@@ -174,8 +174,8 @@ _All projects are prefixed with `Oiski.School.THOP`_
 ---
 
 ## Requirements
-- - [ ] Can display actual reading (_latest readings_) for temperature, humidity and the timestamp for when the reading was recorded
-- - [ ] Can display a graph of the readings
+- - [X] Can display actual reading (_latest readings_) for temperature, humidity and the timestamp for when the reading was recorded
+- - [X] Can display a graph of the readings
     - - [ ] Should be able to pick between latest time, day or week.
 - - [ ] A button should be able to simulate a opening a window or ventilation (_via MQTT and a servo peripheral_)
 - - [X] Mobile app should be structured using MVVM design priciples and Dependency Injection

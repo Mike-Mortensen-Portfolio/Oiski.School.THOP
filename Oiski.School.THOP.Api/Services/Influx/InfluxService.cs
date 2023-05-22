@@ -79,7 +79,8 @@ namespace Oiski.School.THOP.Api.Services.Influx
             using var client = new InfluxDBClient(_url, _token);
             var queryApi = client.GetQueryApiSync();
 
-            var query = from s in InfluxDBQueryable<TType>.Queryable(_bucketName, _orgId, queryApi) select s;
+            var query = from s in InfluxDBQueryable<TType>
+                        .Queryable(_bucketName, _orgId, queryApi) select s;
 
             return query.ToList();
         }

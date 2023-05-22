@@ -17,8 +17,8 @@
                             HeightRequest="250"
                             LegendPosition="Top"
                             LegendTextPaint="{Binding LegendTextColor}"
-                            LegendTextSize="40"/>
-
+                            LegendTextSize="40"
+                            ZoomMode="Both"/>
         <VerticalStackLayout Spacing="10">
             <Label Text="Quick Actions"
                    HorizontalTextAlignment="Center"

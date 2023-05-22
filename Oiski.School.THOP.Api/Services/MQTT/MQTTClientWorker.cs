@@ -57,9 +57,9 @@ namespace Oiski.School.THOP.Api.Services.MQTT
             {
                 humidex = JsonConvert.DeserializeObject<HumidexDTO>(payload);
             }
-            catch (Exception e)
+            catch (JsonReaderException)
             {
-                _logger.LogWarning(e, "Data couldn't be deserialized");
+                _logger.LogWarning("Data couldn't be deserialized");
             }
 
             if (humidex == null)

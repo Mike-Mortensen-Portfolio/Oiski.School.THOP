@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Oiski.School.THOP.App.Services;
 using Oiski.School.THOP.App.ViewModels;
 using Oiski.School.THOP.App.Views;
 using SkiaSharp.Views.Maui.Controls.Hosting;
@@ -18,11 +19,14 @@ namespace Oiski.School.THOP.App
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
+
+            builder.Services.AddSingleton<ApiService>();
+            builder.Services.AddSingleton<HTTPService>();
             builder.Services.AddSingleton<GraphPage>();
             builder.Services.AddSingleton<MainPage>();
             builder.Services.AddTransient<GraphViewModel>();
             builder.Services.AddTransient<MainPageViewModel>();
-            builder.Services.AddHttpClient();
+
 
 #if DEBUG
             builder.Logging.AddDebug();

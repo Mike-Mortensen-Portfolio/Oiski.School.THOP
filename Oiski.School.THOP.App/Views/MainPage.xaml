@@ -31,7 +31,7 @@
                                Grid.Column="0"
                                BorderColor="{StaticResource Secondary}"
                                BackgroundColor="Transparent">
-                            <Label Text="25.6°C"
+                            <Label Text="{Binding Humidex.Temperature, StringFormat='{0:F1}°C'}"
                                    TextColor="{StaticResource Tertiary}"
                                    FontSize="20"
                                    HorizontalOptions="CenterAndExpand"
@@ -43,7 +43,7 @@
                                Grid.Column="1"
                                BorderColor="{StaticResource Secondary}"
                                BackgroundColor="Transparent">
-                            <Label Text="44.4% RH"
+                            <Label Text="{Binding Humidex.Humidity, StringFormat='{0:F1}% RH'}"
                                    TextColor="{StaticResource Tertiary}"
                                    FontSize="20"
                                    HorizontalOptions="CenterAndExpand"
