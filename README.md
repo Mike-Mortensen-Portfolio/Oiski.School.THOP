@@ -59,7 +59,8 @@ _All projects are prefixed with `Oiski.School.THOP`_
         <tr>
             <th>Endpoint</th>
             <th>Type</th>
-            <th>Sample</th>
+            <th>Request Body</th>
+            <th>Response Body</th>
             <th>Description</th>
         </tr>
     </thead>
@@ -81,6 +82,7 @@ _All projects are prefixed with `Oiski.School.THOP`_
 }
 ```
 
+<td><!--Empty--></td>
 <td>
     Turn on the vents controlled by &lt;<i>deviceId</i>&gt; at &lt;<i>locationId</i>&gt;
 </td>
@@ -92,6 +94,9 @@ _All projects are prefixed with `Oiski.School.THOP`_
 <td>
     <code>GET</code>
 </td>
+
+<td><!--Empty--></td>
+
 <td>
 
 ```json
@@ -168,16 +173,16 @@ _All projects are prefixed with `Oiski.School.THOP`_
 
 ---
 
-## Initial Features
+## Requirements
 - - [ ] Can display actual reading (_latest readings_) for temperature, humidity and the timestamp for when the reading was recorded
 - - [ ] Can display a graph of the readings
     - - [ ] Should be able to pick between latest time, day or week.
-- - [ ] A button should be able to simulate opening a window or ventilation (_via MQTT and a servo peripheral_)
-- - [ ] Mobile app should be structured using MVVM design priciples and Dependency Injection
+- - [ ] A button should be able to simulate a opening a window or ventilation (_via MQTT and a servo peripheral_)
+- - [X] Mobile app should be structured using MVVM design priciples and Dependency Injection
 - - [ ] Can display latest data if disconnected
 - - [ ] Should be able to handle unstable internet connection
 
-### Optional Features
+## Optional Requirements
 - - [ ] The ability to switch between telemetry context. Ex. from different parts of a house.
 - - [ ] The ability to register an alarm that will push a notification if the temperature exceeds a given limit
 
@@ -207,8 +212,8 @@ _All projects are prefixed with `Oiski.School.THOP`_
       > Example: v0.55.15-Rel -> v1.0.0-Rel | v0.99.56-Dev -> v0.99.0-Dev
 - **Source Control**
     - `Features` must be branched out and developed on an isolated branch and merged back into the `Developer` branch when done.
-    - `Branches` must be named as follows: *[MajorVersion]/[YouInitials]/[FeatureName]*.
-      > Example: v0/MSM/ExampleBranch.
+    - `Branches` must be all lowercase, seperating words by dashes and named as follows: *[MajorVersion]/[YouInitials]/[FeatureName]*.
+      > Example: v0/msm/example-branch.
 - **Code**
   - `Namespaces` must be constructed as follows: _Oiski.[ProjectName].[FolderName]_.
   - `Fields` must be _private_ or _protected_.

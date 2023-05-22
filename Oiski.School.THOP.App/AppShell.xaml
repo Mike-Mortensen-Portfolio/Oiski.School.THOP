@@ -3,12 +3,27 @@
     x:Class="Oiski.School.THOP.App.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:Oiski.School.THOP.App"
+    xmlns:views="clr-namespace:Oiski.School.THOP.App.Views"
     Shell.FlyoutBehavior="Disabled">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
-
+    <TabBar>
+        <Tab Title="Home"
+         Icon="home.png">
+            <ShellContent
+                Title="Home"
+                ContentTemplate="{DataTemplate views:MainPage}"
+                Route="MainPage" />
+        </Tab>
+        <Tab Title="Graph"
+         Icon="graph.png">
+            <ShellContent
+                Title="Humidex Graph"
+                ContentTemplate="{DataTemplate views:GraphPage}"
+                Route="Graph" />
+        </Tab>
+        <Tab Title="Alarm"
+         Icon="alarm.png">
+            <ShellContent ContentTemplate="{DataTemplate views:GraphPage}" />
+        </Tab>
+    </TabBar>
 </Shell>

@@ -1,4 +1,4 @@
-﻿namespace Oiski.School.THOP.App
+﻿namespace Oiski.School.THOP.App.Views
 {
     public partial class MainPage : ContentPage
     {
