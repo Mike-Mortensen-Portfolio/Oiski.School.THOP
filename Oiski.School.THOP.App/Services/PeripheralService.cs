@@ -14,12 +14,24 @@ namespace Oiski.School.THOP.App.Services
 
         public async Task<bool> OpenVentsAsync(string locationId, string deviceId, bool open = true)
         {
-            var response = await _service.Client.PostAsJsonAsync<VentControlDto>("thop/ventilation", new VentControlDto
+            if (Connectivity.NetworkAccess != NetworkAccess.Internet) { return false; }
+
+            HttpResponseMessage response = new HttpResponseMessage();
+
+            try
             {
-                DeviceId = deviceId,
-                LocationId = locationId,
-                Open = open
-            });
+                response = await _service.Client.PostAsJsonAsync<VentControlDto>("thop/ventilation", new VentControlDto
+                {
+                    DeviceId = deviceId,
+                    LocationId = locationId,
+                    Open = open
+                });
+            }
+            catch (Exception)
+            {
+                //  TODO: Handle Exception
+            }
+
 
             return response.IsSuccessStatusCode;
         }

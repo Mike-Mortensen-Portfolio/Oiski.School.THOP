@@ -2,6 +2,8 @@
 using CommunityToolkit.Mvvm.Input;
 using Oiski.School.THOP.App.Models;
 using Oiski.School.THOP.App.Services;
+using Polly;
+using System.Diagnostics;
 
 namespace Oiski.School.THOP.App.ViewModels
 {
@@ -28,11 +30,20 @@ namespace Oiski.School.THOP.App.ViewModels
         {
             IsBusy = true;
 
-            var readings = await _humidexService.GetAllAsync(new HumidexOptions
-            {
-                EndTime = DateTime.Now,
-                StartTime = DateTime.Now.AddMinutes(-1)
-            });
+            var readings = await Policy
+                .Handle<Exception>()
+                .WaitAndRetryAsync(retryCount: 5, sleepDurationProvider:
+                attempt => TimeSpan.FromSeconds(Math.Pow(2, attempt)),
+                onRetry: (ex, time) =>
+                {
+                    Debug.WriteLine($"An error occured: {ex}, trying again...");
+                })
+                .ExecuteAsync(async () => await _humidexService.GetAllAsync(new HumidexOptions
+                {
+                    EndTime = DateTime.Now,
+                    StartTime = DateTime.Now.AddMinutes(-1)
+                }));
+
             Humidex = readings
                 .OrderBy(humidex => humidex.Time)
                 .TakeLast(1)
@@ -44,7 +55,15 @@ namespace Oiski.School.THOP.App.ViewModels
         [RelayCommand]
         async partial void OnVentilationOnChanged(bool value)
         {
-            await _peripheralService.OpenVentsAsync("home", "oiski_1010", value);
+            var result = await Policy
+                .Handle<Exception>()
+                .WaitAndRetryAsync(retryCount: 5, sleepDurationProvider:
+                attempt => TimeSpan.FromSeconds(Math.Pow(2, attempt)),
+                onRetry: (ex, time) =>
+                {
+                    Debug.WriteLine($"An error occured: {ex}, trying again...");
+                })
+                .ExecuteAsync(async () => await _peripheralService.OpenVentsAsync("home", "oiski_1010", value));
         }
     }
 }

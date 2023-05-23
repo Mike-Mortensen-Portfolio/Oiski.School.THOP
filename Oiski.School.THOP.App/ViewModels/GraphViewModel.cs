@@ -7,6 +7,8 @@ using LiveChartsCore.SkiaSharpView.Painting;
 using Oiski.School.THOP.App.Models;
 using Oiski.School.THOP.App.Services;
 using SkiaSharp;
+using Polly;
+using System.Diagnostics;
 
 namespace Oiski.School.THOP.App.ViewModels
 {
@@ -118,7 +120,15 @@ namespace Oiski.School.THOP.App.ViewModels
                 StartTime = Filter.StartDate
             };
 
-            var readings = await _service.GetAllAsync(filter);
+            var readings = await Policy
+                .Handle<Exception>()
+                .WaitAndRetryAsync(retryCount: 5, sleepDurationProvider:
+                attempt => TimeSpan.FromSeconds(Math.Pow(2, attempt)),
+                onRetry: (ex, time) =>
+                {
+                    Debug.WriteLine($"An error occured: {ex}, trying again...");
+                })
+                .ExecuteAsync(async () => await _service.GetAllAsync(filter));
 
             List<DateTimePoint> temperatureReadings = new List<DateTimePoint>();
             List<DateTimePoint> humidityReadings = new List<DateTimePoint>();

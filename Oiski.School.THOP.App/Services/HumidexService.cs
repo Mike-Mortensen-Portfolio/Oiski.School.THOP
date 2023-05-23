@@ -14,6 +14,8 @@ namespace Oiski.School.THOP.App.Services
 
         public async Task<List<HumidexDto>> GetAllAsync(HumidexOptions options = null)
         {
+            if (Connectivity.NetworkAccess != NetworkAccess.Internet) { return new List<HumidexDto>(); }
+
             if (options == null)
                 options = new HumidexOptions
                 {
