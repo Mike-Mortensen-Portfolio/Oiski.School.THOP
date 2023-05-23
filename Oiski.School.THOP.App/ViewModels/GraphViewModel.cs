@@ -5,14 +5,21 @@ using LiveChartsCore.Defaults;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using Oiski.School.THOP.App.Models;
+using Oiski.School.THOP.App.Services;
 using SkiaSharp;
 
 namespace Oiski.School.THOP.App.ViewModels
 {
     public partial class GraphViewModel : ObservableObject
     {
+        private readonly HumidexService _service;
         [ObservableProperty]
         private QuickAction _quickActionFlag;
+
+        [ObservableProperty]
+        private bool _isBusy;
+        [ObservableProperty]
+        private bool _isNotBusy = false;
 
         [ObservableProperty]
         private GraphFilter _filter = new()
@@ -23,19 +30,15 @@ namespace Oiski.School.THOP.App.ViewModels
 
         #region Series Configuration
         [ObservableProperty]
-        private ISeries[] _series =
+        private ISeries[] _seriesCollection = new LineSeries<DateTimePoint>[]
         {
             new LineSeries<DateTimePoint>
             {
-                Name = "Dummy",
-                Values = new DateTimePoint[]
-                {
-                    new DateTimePoint(DateTime.Now.AddDays (-5), 1),
-                    new DateTimePoint(DateTime.Now.AddDays (-4), 2),
-                    new DateTimePoint(DateTime.Now.AddDays (-3), 3),
-                    new DateTimePoint(DateTime.Now.AddDays (-2), 4),
-                    new DateTimePoint(DateTime.Now.AddDays (-1), 5)
-                }
+                Name = "Temperature"
+            },
+            new LineSeries<DateTimePoint>
+            {
+                Name = "Humidity"
             }
         };
         #endregion
@@ -51,7 +54,8 @@ namespace Oiski.School.THOP.App.ViewModels
                 LabelsPaint = new SolidColorPaint (SKColors.DarkCyan),
                 NameTextSize = 40,
                 TextSize = 30,
-                Labeler = (value) => new DateTime ((long)value).ToString("yy/MM/dd HH:mm")
+                Labeler = (value) => new DateTime ((long)value).ToString("yy/MM/dd HH:mm"),
+                LabelsRotation = 45
             }
         };
 
@@ -75,8 +79,13 @@ namespace Oiski.School.THOP.App.ViewModels
             Color = SKColors.DarkCyan
         };
 
-        [RelayCommand]
-        public void QuickActionInput(QuickAction action)
+        public GraphViewModel(HumidexService service)
+        {
+            _service = service;
+        }
+
+        [RelayCommand(CanExecute = nameof(IsNotBusy))]
+        public async Task QuickActionInputAsync(QuickAction action)
         {
             QuickActionFlag = action;
 
@@ -94,6 +103,37 @@ namespace Oiski.School.THOP.App.ViewModels
             }
 
             Filter.EndDate = DateTime.Now;
+            await UpdateChartAsync();
+
+            QuickActionInputCommand.NotifyCanExecuteChanged();
+        }
+
+        public async Task UpdateChartAsync()
+        {
+            IsBusy = true;
+            IsNotBusy = !IsBusy;
+            var filter = new HumidexOptions
+            {
+                EndTime = Filter.EndDate,
+                StartTime = Filter.StartDate
+            };
+
+            var readings = await _service.GetAllAsync(filter);
+
+            List<DateTimePoint> temperatureReadings = new List<DateTimePoint>();
+            List<DateTimePoint> humidityReadings = new List<DateTimePoint>();
+
+            foreach (var reading in readings)
+            {
+                temperatureReadings.Add(new DateTimePoint(reading.Time.Value.ToLocalTime(), reading.Temperature));
+                humidityReadings.Add(new DateTimePoint(reading.Time.Value.ToLocalTime(), reading.Humidity));
+            }
+
+            SeriesCollection[0].Values = temperatureReadings;
+            SeriesCollection[1].Values = humidityReadings;
+
+            IsBusy = false;
+            IsNotBusy = !IsBusy;
         }
     }
 }

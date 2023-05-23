@@ -1,6 +1,7 @@
 using LiveChartsCore.Defaults;
 using LiveChartsCore.Kernel;
 using LiveChartsCore.SkiaSharpView;
+using Oiski.School.THOP.App.Models;
 using Oiski.School.THOP.App.Services;
 using Oiski.School.THOP.App.ViewModels;
 using System.Globalization;
@@ -9,9 +10,9 @@ namespace Oiski.School.THOP.App.Views;
 
 public partial class GraphPage : ContentPage
 {
-    private readonly ApiService _service;
+    private readonly HumidexService _service;
 
-    public GraphPage(GraphViewModel viewModel, ApiService service)
+    public GraphPage(GraphViewModel viewModel, HumidexService service)
     {
         InitializeComponent();
 
@@ -26,29 +27,6 @@ public partial class GraphPage : ContentPage
     {
         base.OnAppearing();
 
-        var readings = await _service.GetAllAsync();
-
-        List<DateTimePoint> temperatureReadings = new List<DateTimePoint>();
-        List<DateTimePoint> humidityReadings = new List<DateTimePoint>();
-
-        foreach (var reading in readings)
-        {
-            temperatureReadings.Add(new DateTimePoint(reading.Time.Value, reading.Temperature));
-            humidityReadings.Add(new DateTimePoint(reading.Time.Value, reading.Humidity));
-        }
-
-        ViewModel.Series = new LineSeries<DateTimePoint>[]
-        {
-            new LineSeries<DateTimePoint>
-            {
-                Name = "Temperature",
-                Values = temperatureReadings,
-            },
-            new LineSeries<DateTimePoint>
-            {
-                Name = "Humidity",
-                Values = humidityReadings
-            }
-        };
+        await ViewModel.QuickActionInputCommand.ExecuteAsync(QuickAction.Hours24);
     }
 }

@@ -2,13 +2,13 @@
 using CommunityToolkit.Mvvm.Input;
 using Oiski.School.THOP.App.Models;
 using Oiski.School.THOP.App.Services;
-using System.Net.Http.Json;
 
 namespace Oiski.School.THOP.App.ViewModels
 {
     public partial class MainPageViewModel : ObservableObject
     {
-        private readonly ApiService _service;
+        private readonly HumidexService _humidexService;
+        private readonly PeripheralService _peripheralService;
         [ObservableProperty]
         private bool _isBusy;
         [ObservableProperty]
@@ -17,9 +17,10 @@ namespace Oiski.School.THOP.App.ViewModels
         private HumidexDto _humidex;
 
 
-        public MainPageViewModel(ApiService service)
+        public MainPageViewModel(HumidexService humidexService, PeripheralService peripheralService)
         {
-            _service = service;
+            _humidexService = humidexService;
+            _peripheralService = peripheralService;
         }
 
         [RelayCommand]
@@ -27,7 +28,11 @@ namespace Oiski.School.THOP.App.ViewModels
         {
             IsBusy = true;
 
-            var readings = await _service.GetAllAsync();
+            var readings = await _humidexService.GetAllAsync(new HumidexOptions
+            {
+                EndTime = DateTime.Now,
+                StartTime = DateTime.Now.AddMinutes(-1)
+            });
             Humidex = readings
                 .OrderBy(humidex => humidex.Time)
                 .TakeLast(1)
@@ -37,9 +42,9 @@ namespace Oiski.School.THOP.App.ViewModels
         }
 
         [RelayCommand]
-        partial void OnVentilationOnChanged(bool value)
+        async partial void OnVentilationOnChanged(bool value)
         {
-
+            await _peripheralService.OpenVentsAsync("home", "oiski_1010", value);
         }
     }
 }

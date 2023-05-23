@@ -11,7 +11,7 @@
     <VerticalStackLayout Margin="0,20,0,0"
                          Spacing="40">
         <lvc:CartesianChart x:DataType="viewModels:GraphViewModel"
-                            Series="{Binding Series}"
+                            Series="{Binding SeriesCollection}"
                             XAxes="{Binding XAxis}"
                             YAxes="{Binding YAxis}"
                             HeightRequest="250"
@@ -65,10 +65,12 @@
                 <DatePicker Grid.Row="0"
                             Grid.Column="1"
                             HorizontalOptions="CenterAndExpand"
+                            IsEnabled="{Binding IsNotBusy}"
                             Date="{Binding Filter.StartDate.Date}"
                             Format="D"/>
                 <TimePicker Grid.Row="0"
                             Grid.Column="2"
+                            IsEnabled="{Binding IsNotBusy}"
                             Time="{Binding Filter.StartDate.TimeOfDay}"
                             Format="HH:mm"
                             HorizontalOptions="CenterAndExpand"/>
@@ -81,10 +83,12 @@
                 <DatePicker Grid.Row="1"
                             Grid.Column="1"
                             HorizontalOptions="CenterAndExpand"
+                            IsEnabled="{Binding IsNotBusy}"
                             Date="{Binding Filter.EndDate.Date}"
                             Format="D"/>
                 <TimePicker Grid.Row="1"
                             Grid.Column="2"
+                            IsEnabled="{Binding IsNotBusy}"
                             Time="{Binding Filter.EndDate.TimeOfDay}"
                             Format="HH:mm"
                             HorizontalOptions="CenterAndExpand"/>

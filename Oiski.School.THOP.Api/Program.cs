@@ -41,8 +41,8 @@ app.MapGet("thop/humidex", async ([AsParameters] HumidexFilter filter, InfluxSer
 
     var data = await Task.FromResult(
      service.Read<HumidexDTO>()
-    .Where(humidex => filter.Sensor == null || humidex.Sensor == filter.Sensor)
-    .Where(humidex => filter.LocationId == null || humidex.LocationId == filter.LocationId)
+    .Where(humidex => string.IsNullOrWhiteSpace(filter.Sensor) || humidex.Sensor == filter.Sensor)
+    .Where(humidex => string.IsNullOrWhiteSpace(filter.LocationId) || humidex.LocationId == filter.LocationId)
     .Where(humidex => (filter.StartTime == null || humidex.Time!.Value.ToUniversalTime() >= filter.StartTime.Value.ToUniversalTime()) && (filter.EndTime == null || humidex.Time!.Value.ToUniversalTime() <= filter.EndTime.Value.ToUniversalTime()))
     .OrderByDescending(humidex => humidex.Time)
     .ToList());
@@ -86,7 +86,7 @@ app.MapPost("thop/ventilation", async ([FromBody] VentilationOptions options, My
         {
             options.LocationId,
             options.DeviceId,
-            Vents = ((options.On) ? ("On") : ("Off"))
+            Vents = ((options.Open) ? ("On") : ("Off"))
         }));
 
     if (!result.IsSuccess)
@@ -95,7 +95,7 @@ app.MapPost("thop/ventilation", async ([FromBody] VentilationOptions options, My
     return Results.Ok(new
     {
         Topic = topic,
-        Vents = ((options.On) ? ("On") : ("Off")),
+        Vents = ((options.Open) ? ("On") : ("Off")),
         StatusCode = result
     });
 });
