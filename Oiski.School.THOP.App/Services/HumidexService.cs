@@ -7,9 +7,16 @@ namespace Oiski.School.THOP.App.Services
     {
         private readonly HTTPService _service;
 
+        public DeviceDetails DeviceDetails { get; set; }
+
         public HumidexService(HTTPService service)
         {
             _service = service;
+            DeviceDetails = new DeviceDetails
+            {
+                DeviceId = "oiski_1010",
+                LocationId = "home"
+            };
         }
 
         public async Task<List<HumidexDto>> GetAllAsync(HumidexOptions options = null)

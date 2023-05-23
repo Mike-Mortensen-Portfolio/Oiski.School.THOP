@@ -20,6 +20,7 @@ namespace Oiski.School.THOP.App
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
+            builder.Services.AddSingleton<CacheService>();
             builder.Services.AddSingleton<HumidexService>();
             builder.Services.AddSingleton<PeripheralService>();
             builder.Services.AddSingleton<HTTPService>();

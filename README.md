@@ -33,7 +33,7 @@ _All projects are prefixed with `Oiski.School.THOP`_
 
 | Project | Platform | Language | Timeframe | Backend Store |
 |---------|----------|----------|-----------|---------------|
-| `App` | <img style="vertical-align: bottom;" src="/Diagrams/Images/MAUI_Client.png" width="25px" /> NET MAUI | C# | _17.05.23_ - _24.05.23_ | `Api` |
+| `App` | <img style="vertical-align: bottom;" src="/Diagrams/Images/MAUI_Client.png" width="25px" /> NET MAUI | C# | _22.05.23_ - _24.05.23_ | `Api` |
 | `Api` | <img style="vertical-align: bottom;" src="/Diagrams/Images/RestApi_Client.png" width="25px" /> .NET RESTApi | C# | | InfluxDB |
 | `Humidex` | <img style="vertical-align: bottom;" src="/Diagrams/Images/MKR1010_Client.png" width="25px" /> Arduino MKR WiFi 1010 | C++ | | `Api` |
 
@@ -182,8 +182,8 @@ _All projects are prefixed with `Oiski.School.THOP`_
 - - [X] Should be able to handle unstable internet connection
 
 ## Optional Requirements
-- - [ ] Can display latest data if disconnected
-- - [ ] The ability to switch between telemetry context. Ex. from different parts of a house.
+- - [X] Can display latest data if disconnected
+- - [X] The ability to switch between telemetry context. Ex. from different parts of a house.
 - - [ ] The ability to register an alarm that will push a notification if the temperature exceeds a given limit
 
 <p align="right"><strong><a href="#introduction">^ To Top ^</a></strong></p>

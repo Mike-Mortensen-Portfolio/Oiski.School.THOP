@@ -128,6 +128,7 @@ namespace Oiski.School.THOP.App.ViewModels
             IsNotBusy = !IsBusy;
             var filter = new HumidexOptions
             {
+                LocationId = _service.DeviceDetails.LocationId,
                 EndTime = EndDate.Add(EndTime),
                 StartTime = StartDate.Add(StartTime)
             };

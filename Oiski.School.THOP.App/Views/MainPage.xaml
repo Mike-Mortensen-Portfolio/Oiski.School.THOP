@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Oiski.School.THOP.App.Views.MainPage"
              xmlns:viewModels="clr-namespace:Oiski.School.THOP.App.ViewModels"
+             xmlns:converters="clr-namespace:Oiski.School.THOP.App.Converters"
              x:DataType="viewModels:MainPageViewModel">
 
     <RefreshView IsRefreshing="{Binding IsBusy}"
@@ -13,12 +14,12 @@
                                  Padding="30,0">
 
                 <Frame BackgroundColor="{StaticResource Gray600}">
-                    <Grid RowDefinitions="auto, auto, auto"
+                    <Grid RowDefinitions="auto, auto, auto, auto"
                           ColumnDefinitions=".5*, .5*"
                           RowSpacing="10"
                           ColumnSpacing="10">
 
-                        <Label Text="Latest Readings"
+                        <Label Text="{Binding Title}"
                            FontSize="Subtitle"
                            HorizontalOptions="CenterAndExpand"
                            HorizontalTextAlignment="Center"
@@ -26,7 +27,16 @@
                            Grid.Row="0"
                            Grid.Column="0"
                            Grid.ColumnSpan="2"/>
-                        <Frame Grid.Row="1"
+
+                        <Label Text="{Binding Humidex.Time, Converter={converters:ToLocalTimeConverter}, StringFormat='{0:dd/MM/yyyy HH:mm:ss} (Local)'}"
+                           FontSize="Small"
+                           HorizontalOptions="CenterAndExpand"
+                           HorizontalTextAlignment="Center"
+                           TextColor="{StaticResource Gray400 }"
+                           Grid.Row="1"
+                           Grid.Column="0"
+                           Grid.ColumnSpan="2"/>
+                        <Frame Grid.Row="2"
                                Grid.Column="0"
                                BorderColor="{StaticResource Secondary}"
                                BackgroundColor="Transparent">
@@ -38,7 +48,7 @@
                                    FontAttributes="Bold"/>
                         </Frame>
 
-                        <Frame Grid.Row="1"
+                        <Frame Grid.Row="2"
                                Grid.Column="1"
                                BorderColor="{StaticResource Secondary}"
                                BackgroundColor="Transparent">
@@ -53,7 +63,7 @@
                         <Label Text="Pull page to refresh readings"
                                TextColor="{StaticResource Gray500}"
                                HorizontalOptions="CenterAndExpand"
-                               Grid.Row="2"
+                               Grid.Row="3"
                                Grid.Column="0"
                                Grid.ColumnSpan="2"/>
                     </Grid>
@@ -95,6 +105,56 @@
                                 HorizontalOptions="CenterAndExpand"
                                 VerticalOptions="CenterAndExpand"
                                 IsToggled="False"/>
+                    </Grid>
+                </Frame>
+
+                <Frame BackgroundColor="{StaticResource Gray600}">
+                    <Grid RowDefinitions="auto,auto,auto,auto"
+                          ColumnDefinitions="1*, *, 1*"
+                          RowSpacing="10"
+                          ColumnSpacing="10">
+                        <Label Text="Current Device"
+                               FontSize="Subtitle"
+                               HorizontalOptions="CenterAndExpand"
+                               FontAttributes="Bold"
+                               Grid.Row="0"
+                               Grid.Column="0"
+                               Grid.ColumnSpan="3"/>
+
+                        <Label Text="LocationId"
+                               TextColor="{StaticResource Tertiary}"
+                               HorizontalOptions="CenterAndExpand"
+                               VerticalOptions="CenterAndExpand"
+                               Grid.Row="1"
+                               Grid.Column="0"/>
+
+                        <Label Text="DeviceId"
+                               TextColor="{StaticResource Tertiary}"
+                               HorizontalOptions="CenterAndExpand"
+                               VerticalOptions="CenterAndExpand"
+                               Grid.Row="1"
+                               Grid.Column="2"/>
+
+                        <Entry Text="{Binding DeviceDetails.LocationId}"
+                               Grid.Row="2"
+                               Grid.Column="0"/>
+
+                        <Label Text="/"
+                               TextColor="{StaticResource Tertiary}"
+                               HorizontalOptions="CenterAndExpand"
+                               VerticalOptions="CenterAndExpand"
+                               Grid.Row="2"
+                               Grid.Column="1"/>
+
+                        <Entry Text="{Binding DeviceDetails.DeviceId}"
+                               Grid.Row="2"
+                               Grid.Column="2"/>
+
+                        <Button Text="Save"
+                                Grid.Row="3"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="3"
+                                Command="{Binding SetDeviceDetailsCommand}"/>
                     </Grid>
                 </Frame>
 
