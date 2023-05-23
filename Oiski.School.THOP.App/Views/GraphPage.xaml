@@ -51,8 +51,8 @@
                    HorizontalTextAlignment="Center"
                    FontAttributes="Bold"
                    FontSize="Subtitle"/>
-            <Grid RowDefinitions="*,*"
-                  ColumnDefinitions="15*,40*, 15*"
+            <Grid RowDefinitions="*,*,*"
+                  ColumnDefinitions="20*,40*, 10*"
                   HorizontalOptions="FillAndExpand"
                   VerticalOptions="FillAndExpand"
                   Padding="35,0,35,0">
@@ -66,12 +66,12 @@
                             Grid.Column="1"
                             HorizontalOptions="CenterAndExpand"
                             IsEnabled="{Binding IsNotBusy}"
-                            Date="{Binding Filter.StartDate.Date}"
+                            Date="{Binding StartDate}"
                             Format="D"/>
                 <TimePicker Grid.Row="0"
                             Grid.Column="2"
                             IsEnabled="{Binding IsNotBusy}"
-                            Time="{Binding Filter.StartDate.TimeOfDay}"
+                            Time="{Binding StartTime}"
                             Format="HH:mm"
                             HorizontalOptions="CenterAndExpand"/>
                 <Label Text="End Date:"
@@ -84,14 +84,21 @@
                             Grid.Column="1"
                             HorizontalOptions="CenterAndExpand"
                             IsEnabled="{Binding IsNotBusy}"
-                            Date="{Binding Filter.EndDate.Date}"
+                            Date="{Binding EndDate}"
                             Format="D"/>
                 <TimePicker Grid.Row="1"
                             Grid.Column="2"
                             IsEnabled="{Binding IsNotBusy}"
-                            Time="{Binding Filter.EndDate.TimeOfDay}"
+                            Time="{Binding EndTime}"
                             Format="HH:mm"
                             HorizontalOptions="CenterAndExpand"/>
+                <Button Text="Update"
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="3"
+                        HorizontalOptions="CenterAndExpand"
+                        Command="{Binding QuickActionInputCommand}"
+                        CommandParameter="{x:Static models:QuickAction.None}"/>
             </Grid>
         </VerticalStackLayout>
     </VerticalStackLayout>

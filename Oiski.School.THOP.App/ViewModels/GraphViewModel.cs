@@ -6,10 +6,9 @@ using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using Oiski.School.THOP.App.Models;
 using Oiski.School.THOP.App.Services;
-using SkiaSharp;
 using Polly;
+using SkiaSharp;
 using System.Diagnostics;
-using Polly.Caching;
 
 namespace Oiski.School.THOP.App.ViewModels
 {
@@ -23,13 +22,14 @@ namespace Oiski.School.THOP.App.ViewModels
         private bool _isBusy;
         [ObservableProperty]
         private bool _isNotBusy = false;
-
         [ObservableProperty]
-        private GraphFilter _filter = new()
-        {
-            StartDate = DateTime.Now.AddHours(-24),
-            EndDate = DateTime.Now
-        };
+        private DateTime _startDate;
+        [ObservableProperty]
+        private DateTime _endDate;
+        [ObservableProperty]
+        private TimeSpan _startTime;
+        [ObservableProperty]
+        private TimeSpan _endTime;
 
         #region Series Configuration
         [ObservableProperty]
@@ -92,20 +92,31 @@ namespace Oiski.School.THOP.App.ViewModels
         {
             QuickActionFlag = action;
 
+            var date = DateTime.Now;
+            if (action != QuickAction.None)
+            {
+                EndDate = date.Date;
+                EndTime = date.TimeOfDay;
+            }
+
             switch (QuickActionFlag)
             {
                 case QuickAction.Minutes60:
-                    Filter.StartDate = DateTime.Now.AddMinutes(-60);
+                    date = date.AddMinutes(-60);
+                    StartDate = date.Date;
+                    StartTime = date.TimeOfDay;
                     break;
                 case QuickAction.Hours24:
-                    Filter.StartDate = DateTime.Now.AddHours(-24);
+                    date = date.AddHours(-24);
+                    StartDate = date.Date;
+                    StartTime = date.TimeOfDay;
                     break;
                 case QuickAction.Days7:
-                    Filter.StartDate = DateTime.Now.AddDays(-7);
+                    date = date.AddDays(-7);
+                    StartDate = date.Date;
+                    StartTime = date.TimeOfDay;
                     break;
             }
-
-            Filter.EndDate = DateTime.Now;
             await UpdateChartAsync();
 
             QuickActionInputCommand.NotifyCanExecuteChanged();
@@ -117,12 +128,11 @@ namespace Oiski.School.THOP.App.ViewModels
             IsNotBusy = !IsBusy;
             var filter = new HumidexOptions
             {
-                EndTime = Filter.EndDate,
-                StartTime = Filter.StartDate,
-                MaxCount = 5
+                EndTime = EndDate.Add(EndTime),
+                StartTime = StartDate.Add(StartTime)
             };
 
-            var readings = await CachePolicy
+            var readings = await Policy
                 .Handle<Exception>()
                 .WaitAndRetryAsync(retryCount: 5, sleepDurationProvider:
                 attempt => TimeSpan.FromSeconds(Math.Pow(2, attempt)),
@@ -135,8 +145,6 @@ namespace Oiski.School.THOP.App.ViewModels
                     Debug.WriteLine("Fetching Graph data");
                     return await _service.GetAllAsync(filter);
                 });
-
-            //var readings = await _service.GetAllAsync(filter);
 
             List<DateTimePoint> temperatureReadings = new List<DateTimePoint>();
             List<DateTimePoint> humidityReadings = new List<DateTimePoint>();

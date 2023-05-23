@@ -21,8 +21,8 @@ The Mobile application will pull this data and display it using a graph (_See [a
 - [THOP Sensor Circuit](#thop-sensor-circuit)
 - [Endpoints](#endpoints)
 - [Topics](#topics)
-- [Features](#features)
-    - [Optional Features](#optional-features)
+- [Features](#requirements)
+    - [Optional Features](#optional-requirements)
 - [Standards](#standards)
 - [Change Log](#change-log)
 
@@ -179,10 +179,10 @@ _All projects are prefixed with `Oiski.School.THOP`_
     - - [X] Should be able to pick between latest time, day or week.
 - - [X] A button should be able to simulate a opening a window or ventilation (_via MQTT and a servo peripheral_)
 - - [X] Mobile app should be structured using MVVM design priciples and Dependency Injection
-- - [ ] Can display latest data if disconnected
 - - [X] Should be able to handle unstable internet connection
 
 ## Optional Requirements
+- - [ ] Can display latest data if disconnected
 - - [ ] The ability to switch between telemetry context. Ex. from different parts of a house.
 - - [ ] The ability to register an alarm that will push a notification if the temperature exceeds a given limit
 
