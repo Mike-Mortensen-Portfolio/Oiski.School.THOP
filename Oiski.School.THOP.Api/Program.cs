@@ -39,41 +39,41 @@ app.MapGet("thop/humidex", async ([AsParameters] HumidexFilter filter, InfluxSer
     if (filter.StartTime != null && filter.EndTime != null && filter.StartTime > filter.EndTime)
         return Results.BadRequest(new { Error = "Start time can't be higher than end time" });
 
-    //var data = await Task.FromResult(
-    // service.Read<HumidexDTO>()
-    //.Where(humidex => filter.Sensor == null || humidex.Sensor == filter.Sensor)
-    //.Where(humidex => filter.LocationId == null || humidex.LocationId == filter.LocationId)
-    //.Where(humidex => (filter.StartTime == null || humidex.Time!.Value.ToUniversalTime() >= filter.StartTime.Value.ToUniversalTime()) && (filter.EndTime == null || humidex.Time!.Value.ToUniversalTime() <= filter.EndTime.Value.ToUniversalTime()))
-    //.OrderByDescending(humidex => humidex.Time)
-    //.ToList());
+    var data = await Task.FromResult(
+     service.Read<HumidexDTO>()
+    .Where(humidex => filter.Sensor == null || humidex.Sensor == filter.Sensor)
+    .Where(humidex => filter.LocationId == null || humidex.LocationId == filter.LocationId)
+    .Where(humidex => (filter.StartTime == null || humidex.Time!.Value.ToUniversalTime() >= filter.StartTime.Value.ToUniversalTime()) && (filter.EndTime == null || humidex.Time!.Value.ToUniversalTime() <= filter.EndTime.Value.ToUniversalTime()))
+    .OrderByDescending(humidex => humidex.Time)
+    .ToList());
 
-    var data = new List<HumidexDTO>
-    {
-        new HumidexDTO
-        {
-            Humidity = 15.2,
-            LocationId = "home",
-            Sensor = "DHT11",
-            Temperature = 22.5,
-            Time = DateTime.Parse ("2023-05-22T19:09:39.634Z")
-        },
-        new HumidexDTO
-        {
-            Humidity = 50.2,
-            LocationId = "home",
-            Sensor = "DHT11",
-            Temperature = 40.5,
-            Time = DateTime.Parse ("2023-05-22T19:09:41.759Z")
-        },
-        new HumidexDTO
-        {
-            Humidity = 44.2,
-            LocationId = "home",
-            Sensor = "DHT11",
-            Temperature = 12.5,
-            Time = DateTime.Parse ("2023-05-22T18:12:21.171Z")
-        }
-    };
+    //var data = new List<HumidexDTO>
+    //{
+    //    new HumidexDTO
+    //    {
+    //        Humidity = 15.2,
+    //        LocationId = "home",
+    //        Sensor = "DHT11",
+    //        Temperature = 22.5,
+    //        Time = DateTime.Parse ("2023-05-22T19:09:39.634Z")
+    //    },
+    //    new HumidexDTO
+    //    {
+    //        Humidity = 50.2,
+    //        LocationId = "home",
+    //        Sensor = "DHT11",
+    //        Temperature = 40.5,
+    //        Time = DateTime.Parse ("2023-05-22T19:09:41.759Z")
+    //    },
+    //    new HumidexDTO
+    //    {
+    //        Humidity = 44.2,
+    //        LocationId = "home",
+    //        Sensor = "DHT11",
+    //        Temperature = 12.5,
+    //        Time = DateTime.Parse ("2023-05-22T18:12:21.171Z")
+    //    }
+    //};
 
     return Results.Ok(data);
 });

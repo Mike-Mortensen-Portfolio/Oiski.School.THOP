@@ -24,9 +24,10 @@ const char username[] = SECRET_USERNAME;
 const char token[] = SECRET_TOKEN;
 const char broker[] = SECRET_BROKER;
 const int port = 8883;
+const char locationId[] = "home";
 const char clientId[] = "oiski_1010";
-const String topics[] = {String ("home/") + clientId};
-const String publishTopics[] {String ("home/") + clientId + String ("/climate")};
+const String topics[] = {locationId + String ("/") + clientId};
+const String publishTopics[] {locationId + String ("/") + clientId + String ("/climate")};
 bool retain = true;
 
 ////////// Peripherals //////////
@@ -55,67 +56,11 @@ void setup()
   Serial.begin (9600);
   while (!Serial) ; //  Wait for serial to connect
 
-  Serial.print ("Connecting to Wifi: ");
-  Serial.println (ssid);
-  while (WiFi.begin (ssid, pass) != WL_CONNECTED)
-  {
-    Serial.println ("(^__^)");
-    delay (5000);
-  }
-
-  Serial.println("WiFi Connected");
-  Serial.println();
-
   mqttClient.setId(clientId);
   mqttClient.setUsernamePassword(username, token);
   mqttClient.setCleanSession(true);
 
-  Serial.print ("Connecting to MQTT broker: ");
-  Serial.println (broker);
-
-  if (!mqttClient.connect (broker, port))
-  {
-    Serial.print ("Something went wrong. Error Code: ");
-    Serial.println (mqttClient.connectError());
-
-    while (1);
-  }
-
-  Serial.println ("Connected to MQTT Broker");
-  Serial.println();
-  mqttClient.onMessage (onMessageRecieved);
-
-  unsigned int topicsLenght = sizeof(topics)/sizeof(topics[0]);
-  Serial.println ("Subscribing to:");
-  for (unsigned int i = 0; i < topicsLenght; i++)
-  {
-    Serial.print (topics[i]);
-    Serial.print("----------");
-    if (mqttClient.subscribe (topics[i], 1))
-    {
-      Serial.println ("OK");
-    }
-    else
-    {
-      Serial.println ("!!");
-    }
-  }
-
-  Serial.println ("Subcribbed to all provided topics");
-
-  //  Retain and will message
-  unsigned int publishTopicsLenght = sizeof(publishTopics)/sizeof(publishTopics[0]);
-  for (unsigned int i = 0; i < publishTopicsLenght; i++)
-  {
-    Serial.print("Retain for: ");
-    Serial.println(publishTopics[i]);
-    mqttClient.beginMessage (publishTopics[i], retain);
-    mqttClient.print ("You're now subscribbed to: ");
-    mqttClient.println (publishTopics[i]);
-    mqttClient.endMessage();
-  }
-  Serial.println ("Retain message for topics set");
-  //retain = false;
+   mqttClient.onMessage (onMessageRecieved);
 
   Serial.println ("Setup done");
 }
@@ -142,13 +87,11 @@ void loop()
 
   mqttClient.poll();  //  Heartbeat
 
-  unsigned long currentMillis = millis();
-
-  if (currentMillis - currentMillis >= intervalInMili)
+  if (millis () - lastMillis > intervalInMili)
   {
-    currentMillis = currentMillis;
+    lastMillis = millis ();
 
-    publishClimate (publishTopics[0]);
+    publishClimate(publishTopics[0]);
   }
 }
 
@@ -185,7 +128,32 @@ void connectMQTT ()
 
   Serial.println ("Connected");
 
-  mqttClient.subscribe (topics[0]);
+  unsigned int topicsLenght = sizeof(topics)/sizeof(topics[0]);
+  Serial.println ("Subscribing to:");
+  for (unsigned int i = 0; i < topicsLenght; i++)
+  {
+    Serial.print (topics[i]);
+    Serial.print("----------");
+    if (mqttClient.subscribe (topics[i], 1))
+      Serial.println ("OK");
+    else
+      Serial.println ("!!");
+  }
+
+  Serial.println ("Subcribbed to all provided topics");
+
+  //  Retain and will message
+  unsigned int publishTopicsLenght = sizeof(publishTopics)/sizeof(publishTopics[0]);
+  for (unsigned int i = 0; i < publishTopicsLenght; i++)
+  {
+    Serial.print("Retain for: ");
+    Serial.println(publishTopics[i]);
+    mqttClient.beginMessage (publishTopics[i], retain);
+    mqttClient.print ("You're now subscribbed to: ");
+    mqttClient.println (publishTopics[i]);
+    mqttClient.endMessage();
+  }
+  Serial.println ("Retain message for topics set");
 }
 
 void publishClimate (String topic)
@@ -194,9 +162,10 @@ void publishClimate (String topic)
   float hum = dhtSensor.readHumidity();
 
   StaticJsonDocument<256> doc;
-  doc ["Peripheral"] = "DHT11";
-  doc ["Temperature"] = temp;
-  doc ["Humidity"] = hum;
+  doc ["locationId"] = locationId;
+  doc ["sensor"] = "DHT11";
+  doc ["temperature"] = temp;
+  doc ["humidity"] = hum;
 
   mqttClient.beginMessage (topic, (unsigned long) measureJson (doc));
   serializeJson (doc, mqttClient);
@@ -224,6 +193,17 @@ void onMessageRecieved (int messageSize)
   deserializeJson (doc, payload);
   Serial.println ("Processing payload");
 
+  if (doc.containsKey ("VENTS"))
+  {
+    String stateValue = doc["VENTS"];
+    int open = stateValue == String ("ON");
+
+    if (open)
+      servo.write (180);
+    else
+      servo.write (0);
+  }
+
   // if (doc.containsKey ("LED"))
   // {
   //   String payload = doc["LED"];
@@ -231,5 +211,6 @@ void onMessageRecieved (int messageSize)
   //   switchLED(payload == String ("ON") || payload == String ("1"));
   // }
 
+  Serial.println ("Processed");
   Serial.println ();
 }
