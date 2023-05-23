@@ -8,5 +8,6 @@ namespace Oiski.School.THOP.Api.Services.DataContainers
         public string? LocationId { get; set; }
         public DateTime? StartTime { get; set; }
         public DateTime? EndTime { get; set; }
+        public int? MaxCount { get; set; }
     }
 }

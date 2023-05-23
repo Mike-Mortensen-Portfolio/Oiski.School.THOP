@@ -9,6 +9,7 @@ using Oiski.School.THOP.App.Services;
 using SkiaSharp;
 using Polly;
 using System.Diagnostics;
+using Polly.Caching;
 
 namespace Oiski.School.THOP.App.ViewModels
 {
@@ -117,10 +118,11 @@ namespace Oiski.School.THOP.App.ViewModels
             var filter = new HumidexOptions
             {
                 EndTime = Filter.EndDate,
-                StartTime = Filter.StartDate
+                StartTime = Filter.StartDate,
+                MaxCount = 5
             };
 
-            var readings = await Policy
+            var readings = await CachePolicy
                 .Handle<Exception>()
                 .WaitAndRetryAsync(retryCount: 5, sleepDurationProvider:
                 attempt => TimeSpan.FromSeconds(Math.Pow(2, attempt)),
@@ -128,7 +130,13 @@ namespace Oiski.School.THOP.App.ViewModels
                 {
                     Debug.WriteLine($"An error occured: {ex}, trying again...");
                 })
-                .ExecuteAsync(async () => await _service.GetAllAsync(filter));
+                .ExecuteAsync(async () =>
+                {
+                    Debug.WriteLine("Fetching Graph data");
+                    return await _service.GetAllAsync(filter);
+                });
+
+            //var readings = await _service.GetAllAsync(filter);
 
             List<DateTimePoint> temperatureReadings = new List<DateTimePoint>();
             List<DateTimePoint> humidityReadings = new List<DateTimePoint>();
@@ -141,6 +149,9 @@ namespace Oiski.School.THOP.App.ViewModels
 
             SeriesCollection[0].Values = temperatureReadings;
             SeriesCollection[1].Values = humidityReadings;
+
+            XAxis[0].MinLimit = XAxis[0].MaxLimit = null;
+            YAxis[0].MinLimit = YAxis[0].MaxLimit = null;
 
             IsBusy = false;
             IsNotBusy = !IsBusy;

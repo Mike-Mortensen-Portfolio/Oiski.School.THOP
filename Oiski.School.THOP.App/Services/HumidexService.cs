@@ -14,31 +14,22 @@ namespace Oiski.School.THOP.App.Services
 
         public async Task<List<HumidexDto>> GetAllAsync(HumidexOptions options = null)
         {
-            if (Connectivity.NetworkAccess != NetworkAccess.Internet) { return new List<HumidexDto>(); }
-
             if (options == null)
                 options = new HumidexOptions
                 {
                     Sensor = "",
                     EndTime = null,
                     StartTime = null,
-                    LocationId = ""
+                    LocationId = "",
+                    MaxCount = null
                 };
 
             var startTime = ((options.StartTime != null) ? ($"&StartTime={options.StartTime.Value.ToUniversalTime():yyyy-MM-ddTHH:mm:ss.fffZ}") : (null));
             var endTime = ((options.EndTime != null) ? ($"&EndTime={options.EndTime.Value.ToUniversalTime():yyyy-MM-ddTHH:mm:ss.fffZ}") : (null));
-            var query = $"Sensor={options.Sensor}&LocationId={options.LocationId}{startTime ?? string.Empty}{endTime ?? string.Empty}";
+            var maxCount = ((options.MaxCount != null) ? ($"&MaxCount={options.MaxCount.Value}") : (null));
+            var query = $"Sensor={options.Sensor}&LocationId={options.LocationId}{startTime ?? string.Empty}{endTime ?? string.Empty}{maxCount ?? string.Empty}";
 
-            List<HumidexDto> readings = new List<HumidexDto>();
-
-            try
-            {
-                readings = await _service.Client.GetFromJsonAsync<List<HumidexDto>>($"thop/humidex?{query}");
-            }
-            catch (Exception)
-            {
-                //  TODO: Handle Error
-            }
+            List<HumidexDto> readings = await _service.Client.GetFromJsonAsync<List<HumidexDto>>($"thop/humidex?{query}");
 
             return readings;
         }

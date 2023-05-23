@@ -180,7 +180,7 @@ _All projects are prefixed with `Oiski.School.THOP`_
 - - [X] A button should be able to simulate a opening a window or ventilation (_via MQTT and a servo peripheral_)
 - - [X] Mobile app should be structured using MVVM design priciples and Dependency Injection
 - - [ ] Can display latest data if disconnected
-- - [ ] Should be able to handle unstable internet connection
+- - [X] Should be able to handle unstable internet connection
 
 ## Optional Requirements
 - - [ ] The ability to switch between telemetry context. Ex. from different parts of a house.

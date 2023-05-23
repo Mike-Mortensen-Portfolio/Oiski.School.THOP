@@ -38,15 +38,17 @@ namespace Oiski.School.THOP.App.ViewModels
                 {
                     Debug.WriteLine($"An error occured: {ex}, trying again...");
                 })
-                .ExecuteAsync(async () => await _humidexService.GetAllAsync(new HumidexOptions
+                .ExecuteAsync(async () =>
                 {
-                    EndTime = DateTime.Now,
-                    StartTime = DateTime.Now.AddMinutes(-1)
-                }));
+                    Debug.WriteLine("Fetching latest reading");
+
+                    return await _humidexService.GetAllAsync(new HumidexOptions
+                    {
+                        MaxCount = 1
+                    });
+                });
 
             Humidex = readings
-                .OrderBy(humidex => humidex.Time)
-                .TakeLast(1)
                 .FirstOrDefault();
 
             IsBusy = false;
@@ -63,7 +65,11 @@ namespace Oiski.School.THOP.App.ViewModels
                 {
                     Debug.WriteLine($"An error occured: {ex}, trying again...");
                 })
-                .ExecuteAsync(async () => await _peripheralService.OpenVentsAsync("home", "oiski_1010", value));
+                .ExecuteAsync(async () =>
+                {
+                    Debug.WriteLine("Sending vent control data");
+                    return await _peripheralService.OpenVentsAsync("home", "oiski_1010", value);
+                });
         }
     }
 }

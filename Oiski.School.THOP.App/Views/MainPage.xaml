@@ -10,8 +10,7 @@
         <ScrollView>
             <VerticalStackLayout Margin="0,20,0,0"
                                  Spacing="25"
-                                 Padding="30,0"
-                                 VerticalOptions="Start">
+                                 Padding="30,0">
 
                 <Frame BackgroundColor="{StaticResource Gray600}">
                     <Grid RowDefinitions="auto, auto, auto"
@@ -48,8 +47,7 @@
                                    FontSize="20"
                                    HorizontalOptions="CenterAndExpand"
                                    HorizontalTextAlignment="Center"
-                                   FontAttributes="Bold"
-                           />
+                                   FontAttributes="Bold"/>
                         </Frame>
 
                         <Label Text="Pull page to refresh readings"
@@ -62,7 +60,7 @@
                 </Frame>
 
                 <Frame BackgroundColor="{StaticResource Gray600}">
-                    <Grid RowDefinitions="*,*"
+                    <Grid RowDefinitions="*,*,*"
                           ColumnDefinitions=".5*, .5*"
                           RowSpacing="10"
                           ColumnSpacing="10">
@@ -73,6 +71,7 @@
                                Grid.Row="0"
                                Grid.Column="0"
                                Grid.ColumnSpan="2"/>
+
                         <Label Text="Ventilation:"
                                TextColor="{StaticResource Tertiary}"
                                HorizontalOptions="CenterAndExpand"
@@ -84,6 +83,18 @@
                                 HorizontalOptions="CenterAndExpand"
                                 VerticalOptions="CenterAndExpand"
                                 IsToggled="{Binding VentilationOn}"/>
+
+                        <Label Text="Lights:"
+                               TextColor="{StaticResource Tertiary}"
+                               HorizontalOptions="CenterAndExpand"
+                               VerticalOptions="CenterAndExpand"
+                               Grid.Row="2"
+                               Grid.Column="0"/>
+                        <Switch Grid.Row="2"
+                                Grid.Column="1"
+                                HorizontalOptions="CenterAndExpand"
+                                VerticalOptions="CenterAndExpand"
+                                IsToggled="False"/>
                     </Grid>
                 </Frame>
 

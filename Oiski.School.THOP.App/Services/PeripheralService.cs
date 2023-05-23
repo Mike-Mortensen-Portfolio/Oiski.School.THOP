@@ -14,26 +14,39 @@ namespace Oiski.School.THOP.App.Services
 
         public async Task<bool> OpenVentsAsync(string locationId, string deviceId, bool open = true)
         {
-            if (Connectivity.NetworkAccess != NetworkAccess.Internet) { return false; }
-
-            HttpResponseMessage response = new HttpResponseMessage();
-
-            try
+            HttpResponseMessage response = await _service.Client.PostAsJsonAsync<VentControlDto>("thop/ventilation", new VentControlDto
             {
-                response = await _service.Client.PostAsJsonAsync<VentControlDto>("thop/ventilation", new VentControlDto
-                {
-                    DeviceId = deviceId,
-                    LocationId = locationId,
-                    Open = open
-                });
-            }
-            catch (Exception)
-            {
-                //  TODO: Handle Exception
-            }
-
+                DeviceId = deviceId,
+                LocationId = locationId,
+                Open = open
+            });
 
             return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> LightsOnAsync(string locationId, string deviceId, bool on = true)
+        {
+            //  TODO: Add Light Switch
+            throw new NotImplementedException();
+
+            //HttpResponseMessage response = new HttpResponseMessage();
+
+            //try
+            //{
+            //    response = await _service.Client.PostAsJsonAsync<VentControlDto>("thop/ventilation", new VentControlDto
+            //    {
+            //        DeviceId = deviceId,
+            //        LocationId = locationId,
+            //        Open = open
+            //    });
+            //}
+            //catch (Exception)
+            //{
+            //    //  TODO: Handle Exception
+            //}
+
+
+            //return response.IsSuccessStatusCode;
         }
     }
 }

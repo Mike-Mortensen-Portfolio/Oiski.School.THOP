@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Oiski.School.THOP.Api;
 using Oiski.School.THOP.Api.Services.DataContainers;
 using Oiski.School.THOP.Api.Services.Influx;
 using Oiski.School.THOP.Api.Services.MQTT;
@@ -36,46 +37,53 @@ app.UseCors(options =>
 
 app.MapGet("thop/humidex", async ([AsParameters] HumidexFilter filter, InfluxService service) =>
 {
+    if (ManualError.ErrorThrow)
+        return Results.Problem(detail: "This is a test throw!", statusCode: StatusCodes.Status500InternalServerError);
+
     if (filter.StartTime != null && filter.EndTime != null && filter.StartTime > filter.EndTime)
         return Results.BadRequest(new { Error = "Start time can't be higher than end time" });
 
-    var data = await Task.FromResult(
-     service.Read<HumidexDTO>()
-    .Where(humidex => string.IsNullOrWhiteSpace(filter.Sensor) || humidex.Sensor == filter.Sensor)
-    .Where(humidex => string.IsNullOrWhiteSpace(filter.LocationId) || humidex.LocationId == filter.LocationId)
-    .Where(humidex => (filter.StartTime == null || humidex.Time!.Value.ToUniversalTime() >= filter.StartTime.Value.ToUniversalTime()) && (filter.EndTime == null || humidex.Time!.Value.ToUniversalTime() <= filter.EndTime.Value.ToUniversalTime()))
-    .OrderByDescending(humidex => humidex.Time)
-    .ToList());
-
-    //var data = new List<HumidexDTO>
+    #region Seed
+    //IEnumerable<HumidexDTO> data = new List<HumidexDTO>
     //{
     //    new HumidexDTO
     //    {
-    //        Humidity = 15.2,
+    //        Humidity = 60.2,
     //        LocationId = "home",
     //        Sensor = "DHT11",
     //        Temperature = 22.5,
-    //        Time = DateTime.Parse ("2023-05-22T19:09:39.634Z")
+    //        Time = DateTime.Parse ("2023-05-19T16:00:00.0004Z")
+    //    },
+    //    new HumidexDTO
+    //    {
+    //        Humidity = 67,
+    //        LocationId = "home",
+    //        Sensor = "DHT11",
+    //        Temperature = 25.5,
+    //        Time = DateTime.Parse ("2023-05-22T17:00:00.000Z")
     //    },
     //    new HumidexDTO
     //    {
     //        Humidity = 50.2,
     //        LocationId = "home",
     //        Sensor = "DHT11",
-    //        Temperature = 40.5,
-    //        Time = DateTime.Parse ("2023-05-22T19:09:41.759Z")
-    //    },
-    //    new HumidexDTO
-    //    {
-    //        Humidity = 44.2,
-    //        LocationId = "home",
-    //        Sensor = "DHT11",
-    //        Temperature = 12.5,
-    //        Time = DateTime.Parse ("2023-05-22T18:12:21.171Z")
+    //        Temperature = 19.5,
+    //        Time = DateTime.Parse ("2023-05-22T18:00:00.000Z")
     //    }
-    //};
+    //}
+    #endregion
 
-    return Results.Ok(data);
+    IEnumerable<HumidexDTO> data = await Task.FromResult(
+     service.Read<HumidexDTO>()
+    .Where(humidex => string.IsNullOrWhiteSpace(filter.Sensor) || humidex.Sensor == filter.Sensor)
+    .Where(humidex => string.IsNullOrWhiteSpace(filter.LocationId) || humidex.LocationId == filter.LocationId)
+    .Where(humidex => (filter.StartTime == null || humidex.Time!.Value.ToUniversalTime() >= filter.StartTime.Value.ToUniversalTime()) && (filter.EndTime == null || humidex.Time!.Value.ToUniversalTime() <= filter.EndTime.Value.ToUniversalTime()))
+    .OrderByDescending(humidex => humidex.Time));
+
+    if (filter.MaxCount.HasValue)
+        data = data.Take(filter.MaxCount.Value);
+
+    return Results.Ok(data.ToList());
 });
 
 app.MapPost("thop/ventilation", async ([FromBody] VentilationOptions options, MyMQTTClient client) =>
@@ -98,6 +106,13 @@ app.MapPost("thop/ventilation", async ([FromBody] VentilationOptions options, My
         Vents = ((options.Open) ? ("On") : ("Off")),
         StatusCode = result
     });
+});
+
+app.MapGet("thop/killHumidex", () =>
+{
+    ManualError.ErrorThrow = !ManualError.ErrorThrow;
+
+    return Results.Ok(ManualError.ErrorThrow);
 });
 
 app.Run();
