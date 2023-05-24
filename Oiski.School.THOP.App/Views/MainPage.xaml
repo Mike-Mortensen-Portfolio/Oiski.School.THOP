@@ -104,7 +104,7 @@
                                 Grid.Column="1"
                                 HorizontalOptions="CenterAndExpand"
                                 VerticalOptions="CenterAndExpand"
-                                IsToggled="False"/>
+                                IsToggled="{Binding LightsOn}"/>
                     </Grid>
                 </Frame>
 
@@ -137,6 +137,7 @@
 
                         <Entry Text="{Binding DeviceDetails.LocationId}"
                                Grid.Row="2"
+                               HorizontalOptions="CenterAndExpand"
                                Grid.Column="0"/>
 
                         <Label Text="/"
@@ -147,6 +148,7 @@
                                Grid.Column="1"/>
 
                         <Entry Text="{Binding DeviceDetails.DeviceId}"
+                               HorizontalOptions="CenterAndExpand"
                                Grid.Row="2"
                                Grid.Column="2"/>
 

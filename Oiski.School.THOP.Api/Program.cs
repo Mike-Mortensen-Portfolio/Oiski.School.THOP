@@ -86,7 +86,7 @@ app.MapGet("thop/humidex", async ([AsParameters] HumidexFilter filter, InfluxSer
     return Results.Ok(data.ToList());
 });
 
-app.MapPost("thop/ventilation", async ([FromBody] VentilationOptions options, MyMQTTClient client) =>
+app.MapPost("thop/ventilation", async ([FromBody] StateOptions options, MyMQTTClient client) =>
 {
     var topic = $"{options.LocationId.ToLowerInvariant()}/{options.DeviceId.ToLowerInvariant()}";
     var result = await client.PubAsync(topic,
@@ -94,7 +94,7 @@ app.MapPost("thop/ventilation", async ([FromBody] VentilationOptions options, My
         {
             options.LocationId,
             options.DeviceId,
-            Vents = ((options.Open) ? ("On") : ("Off"))
+            Vents = ((options.On) ? ("On") : ("Off"))
         }));
 
     if (!result.IsSuccess)
@@ -103,7 +103,29 @@ app.MapPost("thop/ventilation", async ([FromBody] VentilationOptions options, My
     return Results.Ok(new
     {
         Topic = topic,
-        Vents = ((options.Open) ? ("On") : ("Off")),
+        Vents = ((options.On) ? ("On") : ("Off")),
+        StatusCode = result
+    });
+});
+
+app.MapPost("thop/light", async ([FromBody] StateOptions options, MyMQTTClient client) =>
+{
+    var topic = $"{options.LocationId.ToLowerInvariant()}/{options.DeviceId.ToLowerInvariant()}";
+    var result = await client.PubAsync(topic,
+        JsonConvert.SerializeObject(new
+        {
+            options.LocationId,
+            options.DeviceId,
+            Lights = ((options.On) ? ("On") : ("Off"))
+        }));
+
+    if (!result.IsSuccess)
+        return Results.Problem($"Error: {result}", statusCode: StatusCodes.Status500InternalServerError);
+
+    return Results.Ok(new
+    {
+        Topic = topic,
+        Lights = ((options.On) ? ("On") : ("Off")),
         StatusCode = result
     });
 });

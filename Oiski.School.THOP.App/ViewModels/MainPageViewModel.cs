@@ -19,6 +19,8 @@ namespace Oiski.School.THOP.App.ViewModels
         [ObservableProperty]
         private bool ventilationOn = false;
         [ObservableProperty]
+        private bool _lightsOn = false;
+        [ObservableProperty]
         private HumidexDto _humidex;
         [ObservableProperty]
         private DeviceDetails _deviceDetails;
@@ -103,6 +105,24 @@ namespace Oiski.School.THOP.App.ViewModels
                     Debug.WriteLine("Sending vent control data");
                     return await _peripheralService.OpenVentsAsync(_humidexService.DeviceDetails.LocationId, _humidexService.DeviceDetails.DeviceId, value);
                 });
+        }
+
+        [RelayCommand]
+        async partial void OnLightsOnChanged(bool value)
+        {
+            var result = await Policy
+            .Handle<Exception>()
+            .WaitAndRetryAsync(retryCount: 5, sleepDurationProvider:
+            attempt => TimeSpan.FromSeconds(Math.Pow(2, attempt)),
+            onRetry: (ex, time) =>
+            {
+                Debug.WriteLine($"An error occured: {ex}, trying again...");
+            })
+            .ExecuteAsync(async () =>
+            {
+                Debug.WriteLine("Sending light control data");
+                return await _peripheralService.LightsOnAsync(_humidexService.DeviceDetails.LocationId, _humidexService.DeviceDetails.DeviceId, value);
+            });
         }
 
         [RelayCommand(CanExecute = nameof(IsNotBusy))]

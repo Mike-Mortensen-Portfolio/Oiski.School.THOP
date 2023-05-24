@@ -204,12 +204,16 @@ void onMessageRecieved (int messageSize)
       servo.write (0);
   }
 
-  // if (doc.containsKey ("LED"))
-  // {
-  //   String payload = doc["LED"];
-  //   payload.toUpperCase();
-  //   switchLED(payload == String ("ON") || payload == String ("1"));
-  // }
+  if (doc.containsKey ("LIGHTS"))
+  {
+    String stateValue = doc["LIGHTS"];
+    int on = stateValue == String ("ON");
+
+    if (on)
+      digitalWrite (led_pin, HIGH);
+    else
+      digitalWrite (led_pin, LOW);
+  }
 
   Serial.println ("Processed");
   Serial.println ();

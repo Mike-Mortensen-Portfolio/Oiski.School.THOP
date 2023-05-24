@@ -112,6 +112,52 @@ _All projects are prefixed with `Oiski.School.THOP`_
     Pull telemetry data from Influx based on the query filter
 </td>
 </tr>
+<tr>
+<td>
+    thop/light
+</td>
+<td>
+    <code>POST</code>
+</td>
+
+<td><!--Empty--></td>
+
+<td>
+
+```json
+{
+    "locationId": "home",
+    "deviceId":"ArduinoMKR1010",
+    "lights": true
+}
+```
+
+<td>
+    Switch the lights controlled by &lt;<i>deviceId</i>&gt; at &lt;<i>locationId</i>&gt; on/off
+</td>
+</tr>
+<tr>
+<td>
+    thop/killhumidex
+</td>
+<td>
+    <code>POST</code>
+</td>
+
+<td><!--Empty--></td>
+
+<td>
+
+```json
+true
+```
+
+</td>
+<td>
+    Forces the <code>thop/humidex</code> endpoint to return a 500 Internal Server Error. This endpoint will return <strong>true</strong>
+    if the kill switch is active; otherwise, if not, <strong>false</strong>
+</td>
+</tr>
 </tbody>
 </table>
 

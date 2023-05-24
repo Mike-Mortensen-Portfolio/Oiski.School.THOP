@@ -26,27 +26,14 @@ namespace Oiski.School.THOP.App.Services
 
         public async Task<bool> LightsOnAsync(string locationId, string deviceId, bool on = true)
         {
-            //  TODO: Add Light Switch
-            throw new NotImplementedException();
+            HttpResponseMessage response = await _service.Client.PostAsJsonAsync<LightControlDto>("thop/light", new LightControlDto
+            {
+                DeviceId = deviceId,
+                LocationId = locationId,
+                On = on
+            });
 
-            //HttpResponseMessage response = new HttpResponseMessage();
-
-            //try
-            //{
-            //    response = await _service.Client.PostAsJsonAsync<VentControlDto>("thop/ventilation", new VentControlDto
-            //    {
-            //        DeviceId = deviceId,
-            //        LocationId = locationId,
-            //        Open = open
-            //    });
-            //}
-            //catch (Exception)
-            //{
-            //    //  TODO: Handle Exception
-            //}
-
-
-            //return response.IsSuccessStatusCode;
+            return response.IsSuccessStatusCode;
         }
     }
 }

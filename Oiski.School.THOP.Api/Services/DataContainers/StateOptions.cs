@@ -2,8 +2,8 @@
 
 namespace Oiski.School.THOP.Api.Services.DataContainers
 {
-    public class VentilationOptions : DeviceDetails
+    public class StateOptions : DeviceDetails
     {
-        [Required] public bool Open { get; set; } = true;
+        [Required] public bool On { get; set; } = true;
     }
 }

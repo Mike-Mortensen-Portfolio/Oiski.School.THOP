@@ -1,4 +1,6 @@
-﻿namespace Oiski.School.THOP.App.Services
+﻿using System.Diagnostics;
+
+namespace Oiski.School.THOP.App.Services
 {
     public class CacheService
     {
@@ -11,12 +13,29 @@
 
         public async Task CacheState<T>(T obj)
         {
-            await File.WriteAllTextAsync(_path, obj.ToJson());
+            try
+            {
+                await File.WriteAllTextAsync(_path, obj.ToJson());
+            }
+            catch (Exception e)
+            {
+
+                Debug.WriteLine($"Cannot write cache: {e.Message}");
+            }
         }
 
         public async Task<T> GetCache<T>() where T : new()
         {
-            string cacheJson = await File.ReadAllTextAsync(_path);
+            string cacheJson = null;
+            try
+            {
+                cacheJson = await File.ReadAllTextAsync(_path);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine($"No cache available: {e.Message}");
+            }
+
 
             return new T().FromJson(cacheJson);
         }
