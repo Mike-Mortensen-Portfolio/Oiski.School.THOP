@@ -16,7 +16,7 @@ namespace Oiski.School.THOP.App.Services
             return output;
         }
 
-        public static TObject? FromJson<TObject>(this TObject obj, string json)
+        public static TObject FromJson<TObject>(this TObject obj, string json)
         {
             return JsonSerializer.Deserialize<TObject>(json);
         }
