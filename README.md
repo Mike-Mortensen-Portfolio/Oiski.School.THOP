@@ -42,6 +42,25 @@ _All projects are prefixed with `Oiski.School.THOP`_
 ## THOP Architecture
 ![Architecture_Diagram](/Diagrams/Architecture_Diagram.drawio.png)
 
+**The diagram** above demonstrates the communication between the different sub-systems in THOP system.
+If we read the diagram from the bottom and begin with the `Arduino MKR WiFi 1010` board,
+we can see that MQTT messages are sent to the `HiveMQ` MQTT broker.
+From there each message is relayed to the `MQTTNET Client`,
+which serves as the mediater between the API and the broker,
+and is embedded in the `.NET Minimal REST API`. In that sense the `MQTTNET Client`
+is a sub-part of the API itself.
+
+When the `.NET Minimal REST API` recives humidex data through the `MQTTNET Client`
+the data is pushed to an `InfluxDB` through a seperate pipeline.
+This means that no API endpoint is used to act on the data-stream, published by the physical
+sensor.
+
+The `.NET Minimal REST API` exposes simple endpoints, which can be interacted with by any outsider,
+which, in this case, is a mobile `.NET MAUI` application.
+More specifically the API exposes a `GET` endpoint for communicating with `InfluxDB`,
+as demonstrated on the diagram above. It also exposes `POST` endpoints for controlling peripheral components
+on the `Arduino MKR WiFi 1010`.
+
 <p align="right"><strong><a href="#introduction">^ To Top ^</a></strong></p>
 
 ---
@@ -261,7 +280,7 @@ true
     - `Branches` must be all lowercase, seperating words by dashes and named as follows: *[MajorVersion]/[YouInitials]/[FeatureName]*.
       > Example: v0/msm/example-branch.
 - **Code**
-  - `Namespaces` must be constructed as follows: _Oiski.[ProjectName].[FolderName]_.
+  - `Namespaces` must be constructed as follows: _Oiski.School.[ProjectName].[FolderName]_.
   - `Fields` must be _private_ or _protected_.
   - `Properties` must be _public_, _protected_ or _internal_.
   - `Interfaces` must have their own subfolder, which should never be included in their `namespace`.
