@@ -290,12 +290,10 @@ true
 ---
 
 ## Change Log
- - **[v0.0.0](LinkToGitHubTag)**
+ - **[v1.0.0-Dev](https://github.com/Mike-Mortensen-Portfolio/Oiski.School.THOP/releases/tag/v1.0.0-Dev)**
    - **Added**
-     - _List the features added with this version_
-   - **Modified**
-     - _List the areas that were altered in any way in this version_
-   - **Fixed**
-     - _List the bugs that were fixed in this version_
+     - API with basic endpoints for controlling peripheral components and query telemetry data
+         - MQTTNET Client as a mediater between the HiveMQ broker and the .NET API
+     - Android Application to interact with through the API
 
 <p align="right"><strong><a href="#introduction">^ To Top ^</a></strong></p>
