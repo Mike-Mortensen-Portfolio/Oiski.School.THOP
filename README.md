@@ -68,6 +68,14 @@ on the `Arduino MKR WiFi 1010`.
 ## THOP Sensor Circuit
 ![Circuit_Diagram](/Diagrams/Circuit_Diagram.drawio.png)
 
+**The diagram** above demonstrates how the `Arduino MKR WiFi 1010`
+is set up. The circuit includes a **servo** motor that should simulate opening and closing ventilation,
+as well as a **DHT11** sensor, which is the peripheral used to collect Humidity and Temperature data.
+The API and board also supports control of an LED, however, this is not shown on the circuit,
+as the peripheral is not necessary or important in order for the system to serve its purpose.
+The endpoints and functionality, however, are implemented in both the API and on the board,
+as well as in the mobile application.
+
 <p align="right"><strong><a href="#introduction">^ To Top ^</a></strong></p>
 
 ---
