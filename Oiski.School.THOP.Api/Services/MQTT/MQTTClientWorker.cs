@@ -1,7 +1,7 @@
 ﻿using MQTTnet.Client;
 using Newtonsoft.Json;
-using Oiski.School.THOP.Api.Services.DataContainers;
 using Oiski.School.THOP.Api.Services.Influx;
+using Oiski.School.THOP.Services.Models;
 using System.Globalization;
 
 namespace Oiski.School.THOP.Api.Services.MQTT
@@ -31,6 +31,12 @@ namespace Oiski.School.THOP.Api.Services.MQTT
             _service = service;
         }
 
+        /// <summary>
+        /// This method is executed by the hosted service handler and will register an event handler for the
+        /// <see cref="MyMQTTClient"/> reciever
+        /// </summary>
+        /// <param name="stoppingToken"></param>
+        /// <returns>The <see cref="Task"/> that represents the asynchronous operation</returns>
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             var resultCode = await _client.ConnectWithTLS(_broker, _username, _password);
@@ -49,13 +55,18 @@ namespace Oiski.School.THOP.Api.Services.MQTT
             });
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="payload"></param>
+        /// <returns>The <see cref="Task"/> that represents the <see langword="asynchronous"/> operation</returns>
         private async Task PushClimateDataToInflux(string payload)
         {
-            HumidexDTO? humidex = null;
+            HumidexDto? humidex = null;
 
             try
             {
-                humidex = JsonConvert.DeserializeObject<HumidexDTO>(payload);
+                humidex = JsonConvert.DeserializeObject<HumidexDto>(payload);
             }
             catch (JsonReaderException)
             {

@@ -11,12 +11,19 @@ namespace Oiski.School.THOP.Api.Services.MQTT
         private IMqttClient? _client;
         private Action<string>? _logger;
 
+        /// <summary>
+        /// Instantiates a new instance of type <see cref="MyMQTTClient"/>
+        /// </summary>
         public MyMQTTClient()
         {
             _factory = new MqttFactory();
             _client = _factory.CreateMqttClient();
         }
 
+        /// <summary>
+        /// Instantiates a new instance of type <see cref="MyMQTTClient"/> with a logger <see cref="Delegate"/> attached
+        /// </summary>
+        /// <param name="logger"></param>
         public MyMQTTClient(Action<string> logger) : this()
         {
             _logger = logger;
@@ -92,7 +99,11 @@ namespace Oiski.School.THOP.Api.Services.MQTT
         }
 
         /// <summary>
-        /// 
+        /// Use this to handle recieved <strong>MQTT</strong> messages
+        /// <br/>
+        /// <br/>
+        /// <strong>Note:</strong> Do not loop this method or excute multiple times, as the <paramref name="handler"/>
+        /// will be registered as a listener and scoop every incommming message in its sub range
         /// </summary>
         /// <param name="handler"></param>
         /// <exception cref="NullReferenceException"></exception>

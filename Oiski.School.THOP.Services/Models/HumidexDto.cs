@@ -1,6 +1,6 @@
-﻿namespace Oiski.School.THOP.Api.Services.DataContainers
+﻿namespace Oiski.School.THOP.Services.Models
 {
-    public class HumidexDTO
+    public class HumidexDto
     {
         public string LocationId { get; set; } = null!;
         public string Sensor { get; set; } = null!;

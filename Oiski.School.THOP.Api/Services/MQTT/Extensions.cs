@@ -7,25 +7,9 @@ namespace Oiski.School.THOP.Api.Services.MQTT
     public static class Extensions
     {
         /// <summary>
-        /// Dump <paramref name="obj"/> to the <see cref="Console"/> as a <strong>JSON</strong> <see langword="object"/>
+        /// Dumps the payload of an <see cref="MqttApplicationMessageReceivedEventArgs"/> to the <see cref="Console"/>
         /// </summary>
-        /// <typeparam name="TObject"></typeparam>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public static TObject DumpToConsole<TObject>(this TObject obj)
-        {
-            var output = "NULL";
-            if (obj != null)
-                output = JsonSerializer.Serialize(obj, new JsonSerializerOptions
-                {
-                    WriteIndented = true
-                });
-
-            Console.WriteLine($"[{obj?.GetType().Name}]:\r\n{output}");
-
-            return obj;
-        }
-
+        /// <param name="args"></param>
         public static void DumpToConsole(this MqttApplicationMessageReceivedEventArgs args)
         {
             Console.WriteLine(args.GetPayload());
@@ -53,7 +37,7 @@ namespace Oiski.School.THOP.Api.Services.MQTT
         }
 
         /// <summary>
-        /// Add the <see cref="MyMQTTClient"/> as a hosted service
+        /// Add the <see cref="MQTTClientWorker"/> as a hosted service
         /// </summary>
         /// <param name="builder"></param>
         public static void HookMQTTWorker(this WebApplicationBuilder builder)

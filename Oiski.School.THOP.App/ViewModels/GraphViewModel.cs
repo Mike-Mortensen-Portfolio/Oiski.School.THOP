@@ -6,6 +6,7 @@ using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using Oiski.School.THOP.App.Models;
 using Oiski.School.THOP.App.Services;
+using Oiski.School.THOP.Services.Models;
 using Polly;
 using SkiaSharp;
 using System.Diagnostics;

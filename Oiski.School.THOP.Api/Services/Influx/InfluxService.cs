@@ -4,6 +4,9 @@ using System.Text;
 
 namespace Oiski.School.THOP.Api.Services.Influx
 {
+    /// <summary>
+    /// Represents a mediater between the <strong>Codebase</strong> and <strong>InfluxDB</strong>
+    /// </summary>
     public class InfluxService
     {
         private readonly ILogger<InfluxService> _logger = null!;
@@ -12,6 +15,11 @@ namespace Oiski.School.THOP.Api.Services.Influx
         private readonly string _url = null!;
         private readonly string _token = null!;
 
+        /// <summary>
+        /// Instantiates a new instance of type <see cref="InfluxService"/> with a logger and configuration attached
+        /// </summary>
+        /// <param name="logger"></param>
+        /// <param name="configuration">The configuration from which all setup parameters are read</param>
         public InfluxService(ILogger<InfluxService> logger, IConfiguration configuration)
         {
             _bucketName = configuration["Influx:BucketName"]!;
@@ -30,7 +38,7 @@ namespace Oiski.School.THOP.Api.Services.Influx
         /// <param name="table"></param>
         /// <param name="tag"></param>
         /// <param name="data"></param>
-        /// <returns></returns>
+        /// <returns>The Task that represents the <see langword="asynchronous"/> operation</returns>
         public async Task WriteAsync(string table, KeyValuePair<string, string> tag, params KeyValuePair<string, string>[] data)
         {
             _logger.LogInformation("Writing data to: {Bucket}", _bucketName);
@@ -49,6 +57,11 @@ namespace Oiski.School.THOP.Api.Services.Influx
             _logger.LogInformation("Data Written");
         }
 
+        /// <summary>
+        /// Read <strong>Bucket</strong> data as a grouped collection
+        /// </summary>
+        /// <returns>The <see cref="Task"/> that represents the <see langword="asynchronous"/>, contain a <see cref="Dictionary{TKey, TValue}"/>
+        /// constructed from the column name and the grouped values</returns>
         public async Task<Dictionary<string, List<string>>> ReadAsGroups()
         {
             var data = new Dictionary<string, List<string>>();
@@ -74,13 +87,19 @@ namespace Oiski.School.THOP.Api.Services.Influx
             return data;
         }
 
+        /// <summary>
+        /// Read <strong>Bucket</strong> data as a collection of type <typeparamref name="TType"/>
+        /// </summary>
+        /// <typeparam name="TType"></typeparam>
+        /// <returns>A collection of type <typeparamref name="TType"/></returns>
         public List<TType> Read<TType>()
         {
             using var client = new InfluxDBClient(_url, _token);
             var queryApi = client.GetQueryApiSync();
 
             var query = from s in InfluxDBQueryable<TType>
-                        .Queryable(_bucketName, _orgId, queryApi) select s;
+                        .Queryable(_bucketName, _orgId, queryApi)
+                        select s;
 
             return query.ToList();
         }

@@ -1,7 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Oiski.School.THOP.App.Models;
 using Oiski.School.THOP.App.Services;
+using Oiski.School.THOP.Services.Models;
 using Polly;
 using System.Diagnostics;
 
@@ -128,7 +128,7 @@ namespace Oiski.School.THOP.App.ViewModels
         [RelayCommand(CanExecute = nameof(IsNotBusy))]
         public async Task SetDeviceDetails()
         {
-            _humidexService.DeviceDetails = DeviceDetails;
+            _humidexService.DeviceDetails = this.DeviceDetails;
 
             await RefreshCommand?.ExecuteAsync(null);
         }

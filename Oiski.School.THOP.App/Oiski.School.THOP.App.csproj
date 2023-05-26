@@ -57,6 +57,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\Oiski.School.THOP.Services\Oiski.School.THOP.Services.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <Compile Update="Views\GraphPage.xaml.cs">
 	    <DependentUpon>GraphPage.xaml</DependentUpon>
 	  </Compile>

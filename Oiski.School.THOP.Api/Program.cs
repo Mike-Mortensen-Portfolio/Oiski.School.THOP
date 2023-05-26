@@ -4,6 +4,7 @@ using Oiski.School.THOP.Api;
 using Oiski.School.THOP.Api.Services.DataContainers;
 using Oiski.School.THOP.Api.Services.Influx;
 using Oiski.School.THOP.Api.Services.MQTT;
+using Oiski.School.THOP.Services.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,7 +36,9 @@ app.UseCors(options =>
     options.AllowAnyOrigin();
 });
 
-app.MapGet("thop/humidex", async ([AsParameters] HumidexFilter filter, InfluxService service) =>
+var thopEndpoints = app.MapGroup("thop/");
+
+thopEndpoints.MapGet("humidex", async ([AsParameters] HumidexFilter filter, InfluxService service) =>
 {
     if (ManualError.ErrorThrow)
         return Results.Problem(detail: "This is a test throw!", statusCode: StatusCodes.Status500InternalServerError);
@@ -73,8 +76,8 @@ app.MapGet("thop/humidex", async ([AsParameters] HumidexFilter filter, InfluxSer
     //}
     #endregion
 
-    IEnumerable<HumidexDTO> data = await Task.FromResult(
-     service.Read<HumidexDTO>()
+    IEnumerable<HumidexDto> data = await Task.FromResult(
+     service.Read<HumidexDto>()
     .Where(humidex => string.IsNullOrWhiteSpace(filter.Sensor) || humidex.Sensor == filter.Sensor)
     .Where(humidex => string.IsNullOrWhiteSpace(filter.LocationId) || humidex.LocationId == filter.LocationId)
     .Where(humidex => (filter.StartTime == null || humidex.Time!.Value.ToUniversalTime() >= filter.StartTime.Value.ToUniversalTime()) && (filter.EndTime == null || humidex.Time!.Value.ToUniversalTime() <= filter.EndTime.Value.ToUniversalTime()))
@@ -86,7 +89,7 @@ app.MapGet("thop/humidex", async ([AsParameters] HumidexFilter filter, InfluxSer
     return Results.Ok(data.ToList());
 });
 
-app.MapPost("thop/ventilation", async ([FromBody] StateOptions options, MyMQTTClient client) =>
+thopEndpoints.MapPost("ventilation", async ([FromBody] StateOptions options, MyMQTTClient client) =>
 {
     var topic = $"{options.LocationId.ToLowerInvariant()}/{options.DeviceId.ToLowerInvariant()}";
     var result = await client.PubAsync(topic,
@@ -108,7 +111,7 @@ app.MapPost("thop/ventilation", async ([FromBody] StateOptions options, MyMQTTCl
     });
 });
 
-app.MapPost("thop/light", async ([FromBody] StateOptions options, MyMQTTClient client) =>
+thopEndpoints.MapPost("light", async ([FromBody] StateOptions options, MyMQTTClient client) =>
 {
     var topic = $"{options.LocationId.ToLowerInvariant()}/{options.DeviceId.ToLowerInvariant()}";
     var result = await client.PubAsync(topic,
@@ -130,7 +133,7 @@ app.MapPost("thop/light", async ([FromBody] StateOptions options, MyMQTTClient c
     });
 });
 
-app.MapGet("thop/killHumidex", () =>
+thopEndpoints.MapGet("killHumidex", () =>
 {
     ManualError.ErrorThrow = !ManualError.ErrorThrow;
 

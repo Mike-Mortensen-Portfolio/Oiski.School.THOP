@@ -1,4 +1,5 @@
 ﻿using Oiski.School.THOP.App.Models;
+using Oiski.School.THOP.Services.Models;
 using System.Net.Http.Json;
 
 namespace Oiski.School.THOP.App.Services
@@ -14,7 +15,7 @@ namespace Oiski.School.THOP.App.Services
 
         public async Task<bool> OpenVentsAsync(string locationId, string deviceId, bool open = true)
         {
-            HttpResponseMessage response = await _service.Client.PostAsJsonAsync<VentControlDto>("thop/ventilation", new VentControlDto
+            HttpResponseMessage response = await _service.Client.PostAsJsonAsync("thop/ventilation", new VentControlDevice
             {
                 DeviceId = deviceId,
                 LocationId = locationId,
@@ -26,7 +27,7 @@ namespace Oiski.School.THOP.App.Services
 
         public async Task<bool> LightsOnAsync(string locationId, string deviceId, bool on = true)
         {
-            HttpResponseMessage response = await _service.Client.PostAsJsonAsync<LightControlDto>("thop/light", new LightControlDto
+            HttpResponseMessage response = await _service.Client.PostAsJsonAsync("thop/light", new LightControlDevice
             {
                 DeviceId = deviceId,
                 LocationId = locationId,

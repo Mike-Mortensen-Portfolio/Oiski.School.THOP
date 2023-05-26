@@ -1,14 +1,25 @@
-﻿using Oiski.School.THOP.App.Models;
+﻿using Oiski.School.THOP.Services;
+using Oiski.School.THOP.Services.Models;
 using System.Net.Http.Json;
 
 namespace Oiski.School.THOP.App.Services
 {
+    /// <summary>
+    /// Represents a service that exposes the <strong>Humidex</strong> API endpoints in the <strong>THOP</strong> Ecosystem
+    /// </summary>
     public class HumidexService
     {
         private readonly HTTPService _service;
 
+        /// <summary>
+        /// The details that defines 
+        /// </summary>
         public DeviceDetails DeviceDetails { get; set; }
 
+        /// <summary>
+        /// Instantiates a new instance of type <see cref="HumidexService"/> with an <see cref="HttpClient"/> wrapper
+        /// </summary>
+        /// <param name="service"></param>
         public HumidexService(HTTPService service)
         {
             _service = service;
