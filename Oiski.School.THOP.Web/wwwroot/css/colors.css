@@ -1,1 +1,9 @@
-﻿
+﻿:root {
+    --primary: #291F1E;
+    --secondary: #3C6E71;
+    --tertiary: #8FC7AE;
+    --cyan: #00ffff;
+    --blue-200-accent: #72ACF1;
+    --gray-500: #6E6E6E;
+    --gray-600: #404040;
+}

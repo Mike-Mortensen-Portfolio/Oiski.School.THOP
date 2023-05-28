@@ -9,8 +9,8 @@ namespace Oiski.School.THOP.App.ViewModels
 {
     public partial class MainPageViewModel : ObservableObject
     {
-        private readonly HumidexService _humidexService;
-        private readonly PeripheralService _peripheralService;
+        private readonly HumidexMauiService _humidexService;
+        private readonly PeripheralMauiService _peripheralService;
         private readonly CacheService _cacheService;
         [ObservableProperty]
         private bool _isBusy;
@@ -28,7 +28,7 @@ namespace Oiski.School.THOP.App.ViewModels
         private string _title;
 
 
-        public MainPageViewModel(HumidexService humidexService, PeripheralService peripheralService, CacheService cacheService)
+        public MainPageViewModel(HumidexMauiService humidexService, PeripheralMauiService peripheralService, CacheService cacheService)
         {
             _humidexService = humidexService;
             _peripheralService = peripheralService;

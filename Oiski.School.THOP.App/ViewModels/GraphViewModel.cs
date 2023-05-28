@@ -15,7 +15,7 @@ namespace Oiski.School.THOP.App.ViewModels
 {
     public partial class GraphViewModel : ObservableObject
     {
-        private readonly HumidexService _service;
+        private readonly HumidexMauiService _service;
         [ObservableProperty]
         private QuickAction _quickActionFlag;
 
@@ -83,7 +83,7 @@ namespace Oiski.School.THOP.App.ViewModels
             Color = SKColors.DarkCyan
         };
 
-        public GraphViewModel(HumidexService service)
+        public GraphViewModel(HumidexMauiService service)
         {
             _service = service;
         }

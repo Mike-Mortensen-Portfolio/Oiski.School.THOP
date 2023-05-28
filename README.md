@@ -13,6 +13,10 @@ The idea is to have the embedded system read humidex data from a sensor and push
 through the **MQTT protocol**. The Api will then store it in an InfluxDB.
 The Mobile application will pull this data and display it using a graph (_See [architecture](#thop-architecture)_).
 
+*28/05/2023* - Introduced Blazor Server Application to act as another client.
+There's no inherent difference in flow between the mobile **MAUI Client** and the **Blazor Server** application,
+as shown on the [architecture](#thop-architecture) diagram below.
+
 ---
 
 ## Table of Contents
@@ -31,18 +35,19 @@ The Mobile application will pull this data and display it using a graph (_See [a
 ## Projects
 _All projects are prefixed with `Oiski.School.THOP`_
 
-| Project | Platform | Language | Timeframe | Backend Store |
+| Project | Platform | Languages | Timeframe | Backend Store |
 |---------|----------|----------|-----------|---------------|
-| `App` | <img style="vertical-align: bottom;" src="/Diagrams/Images/MAUI_Client.png" width="25px" /> NET MAUI | C# | _22.05.23_ - _24.05.23_ | `Api` |
+| `App` | <img style="vertical-align: bottom;" src="/Diagrams/Images/MAUI_Client.png" width="25px" /> NET MAUI | C#, XAML | _22.05.23_ - _24.05.23_ | `Api` |
 | `Api` | <img style="vertical-align: bottom;" src="/Diagrams/Images/RestApi_Client.png" width="25px" /> .NET RESTApi | C# | | InfluxDB |
 | `Humidex` | <img style="vertical-align: bottom;" src="/Diagrams/Images/MKR1010_Client.png" width="25px" /> Arduino MKR WiFi 1010 | C++ | | `Api` |
+| `Web` | <img style="vertical-align: bottom;" src="/Diagrams/Images/MAUI_Client.png" width="25px" /> .NET Blazor Server | C#, JS, HTML, CSS | | `Api` |
 
 ---
 
 ## THOP Architecture
 ![Architecture_Diagram](/Diagrams/Architecture_Diagram.drawio.png)
 
-**The diagram** above demonstrates the communication between the different sub-systems in THOP system.
+**The diagram** above demonstrates the communication between the different sub-systems in **THOP** system.
 If we read the diagram from the bottom and begin with the `Arduino MKR WiFi 1010` board,
 we can see that MQTT messages are sent to the `HiveMQ` MQTT broker.
 From there each message is relayed to the `MQTTNET Client`,
@@ -60,6 +65,10 @@ which, in this case, is a mobile `.NET MAUI` application.
 More specifically the API exposes a `GET` endpoint for communicating with `InfluxDB`,
 as demonstrated on the diagram above. It also exposes `POST` endpoints for controlling peripheral components
 on the `Arduino MKR WiFi 1010`.
+
+*28/05/2023* - The `Blazor Server Application` acts as a client and incorperates a desktop solution
+for the **THOP** ecosystem. It supports the exact same dataset as the mobile **MAUI Client**,
+which means that the two clients are identical to the extend of data manipulation and display.
 
 <p align="right"><strong><a href="#introduction">^ To Top ^</a></strong></p>
 

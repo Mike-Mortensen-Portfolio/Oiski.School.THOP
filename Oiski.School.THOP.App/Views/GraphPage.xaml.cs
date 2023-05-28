@@ -10,9 +10,9 @@ namespace Oiski.School.THOP.App.Views;
 
 public partial class GraphPage : ContentPage
 {
-    private readonly HumidexService _service;
+    private readonly HumidexMauiService _service;
 
-    public GraphPage(GraphViewModel viewModel, HumidexService service)
+    public GraphPage(GraphViewModel viewModel, HumidexMauiService service)
     {
         InitializeComponent();
 

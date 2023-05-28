@@ -1,13 +1,16 @@
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using Oiski.School.THOP.Web.Data;
+using Oiski.School.THOP.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<WeatherForecastService>();
+builder.Services.AddScoped<HumidexServiceScope>();
+builder.Services.AddScoped<PeripheralServiceScope>();
+builder.Services.AddHttpClient("THOP_Api", client =>
+{
+    client.BaseAddress = new Uri("https://kvttffdl-7055.euw.devtunnels.ms");    //  Api uses a Dev Tunnel
+});
 
 var app = builder.Build();
 

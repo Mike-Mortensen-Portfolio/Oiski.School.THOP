@@ -21,8 +21,8 @@ namespace Oiski.School.THOP.App
                 });
 
             builder.Services.AddSingleton<CacheService>();
-            builder.Services.AddSingleton<HumidexService>();
-            builder.Services.AddSingleton<PeripheralService>();
+            builder.Services.AddSingleton<HumidexMauiService>();
+            builder.Services.AddSingleton<PeripheralMauiService>();
             builder.Services.AddSingleton<HTTPService>();
             builder.Services.AddSingleton<GraphPage>();
             builder.Services.AddSingleton<MainPage>();

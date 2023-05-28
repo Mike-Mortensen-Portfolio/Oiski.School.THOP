@@ -1,15 +1,14 @@
-﻿using Oiski.School.THOP.Services;
-using Oiski.School.THOP.Services.Models;
+﻿using Oiski.School.THOP.Services.Models;
 using System.Net.Http.Json;
 
-namespace Oiski.School.THOP.App.Services
+namespace Oiski.School.THOP.Services
 {
     /// <summary>
     /// Represents a service that exposes the <strong>Humidex</strong> API endpoints in the <strong>THOP</strong> Ecosystem
     /// </summary>
     public class HumidexService
     {
-        private readonly HTTPService _service;
+        private readonly HttpClient _client;
 
         /// <summary>
         /// The details that defines 
@@ -19,10 +18,10 @@ namespace Oiski.School.THOP.App.Services
         /// <summary>
         /// Instantiates a new instance of type <see cref="HumidexService"/> with an <see cref="HttpClient"/> wrapper
         /// </summary>
-        /// <param name="service"></param>
-        public HumidexService(HTTPService service)
+        /// <param name="client"></param>
+        public HumidexService(HttpClient client)
         {
-            _service = service;
+            _client = client;
             DeviceDetails = new DeviceDetails
             {
                 DeviceId = "oiski_1010",
@@ -30,7 +29,7 @@ namespace Oiski.School.THOP.App.Services
             };
         }
 
-        public async Task<List<HumidexDto>> GetAllAsync(HumidexOptions options = null)
+        public async Task<List<HumidexDto>> GetAllAsync(HumidexOptions options = null!)
         {
             if (options == null)
                 options = new HumidexOptions
@@ -47,7 +46,7 @@ namespace Oiski.School.THOP.App.Services
             var maxCount = ((options.MaxCount != null) ? ($"&MaxCount={options.MaxCount.Value}") : (null));
             var query = $"Sensor={options.Sensor}&LocationId={options.LocationId}{startTime ?? string.Empty}{endTime ?? string.Empty}{maxCount ?? string.Empty}";
 
-            List<HumidexDto> readings = await _service.Client.GetFromJsonAsync<List<HumidexDto>>($"thop/humidex?{query}");
+            List<HumidexDto> readings = await _client?.GetFromJsonAsync<List<HumidexDto>>($"thop/humidex?{query}")! ?? new List<HumidexDto>();
 
             return readings;
         }

@@ -6,4 +6,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Oiski.School.THOP.Services\Oiski.School.THOP.Services.csproj" />
+  </ItemGroup>
+
 </Project>
