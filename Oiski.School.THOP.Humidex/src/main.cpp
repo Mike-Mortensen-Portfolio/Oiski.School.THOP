@@ -8,7 +8,7 @@
 
 /////////// Interval //////////
 unsigned long lastMillis = 0;
-unsigned int intervalInMili = 10000;
+unsigned int intervalInMili = 120000;
 unsigned int retryIntervalInMili = 5000;
 
 //  Networking
@@ -54,7 +54,7 @@ void setup()
   pinMode (led_pin, OUTPUT);
   servo.attach (servo_pin);
   Serial.begin (9600);
-  while (!Serial) ; //  Wait for serial to connect
+  // while (!Serial) ; //  Wait for serial to connect
 
   mqttClient.setId(clientId);
   mqttClient.setUsernamePassword(username, token);
