@@ -1,9 +1,25 @@
-﻿.border-tertiary {
+﻿.border-secondary {
+    border-color: var(--secondary) !important;
+}
+
+.border-tertiary {
     border-color: var(--tertiary) !important;
 }
 
+.text-secondary {
+    color: var(--secondary) !important;
+}
+
 .text-tertiary {
-    border-color: var(--tertiary) !important;
+    color: var(--tertiary) !important;
+}
+
+.text-cyan {
+    color: var(--cyan) !important;
+}
+
+.text-blue-200-accent {
+    color: var(--blue-200-accent) !important;
 }
 
 .bg-primary {
@@ -35,6 +51,11 @@
     background-color: var(--secondary);
 }
 
+.btn-tertiary {
+    color: var(--primary);
+    background-color: var(--tertiary);
+}
+
 .btn-cyan {
     color: var(--primary);
     background-color: var(--cyan);
@@ -42,4 +63,16 @@
 
     .btn-secondary:hover, .btn-cyan:hover {
         color: var(--tertiary);
+    }
+
+.textfield {
+    color: var(--blue-200-accent) !important;
+    background-color: var(--gray-600) !important;
+    border: 1px solid var(--secondary) !important;
+}
+
+    .textfield:focus {
+        outline: 1px solid var(--tertiary) !important;
+        border: 1px solid var(--secondary) !important;
+        box-shadow: none;
     }

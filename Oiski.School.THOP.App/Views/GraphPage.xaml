@@ -4,7 +4,7 @@
              xmlns:lvc="clr-namespace:LiveChartsCore.SkiaSharpView.Maui;assembly=LiveChartsCore.SkiaSharpView.Maui"
              xmlns:viewModels="clr-namespace:Oiski.School.THOP.App.ViewModels"
              xmlns:views="clr-namespace:Oiski.School.THOP.App.Views"
-             xmlns:models="clr-namespace:Oiski.School.THOP.App.Models"
+             xmlns:models="clr-namespace:Oiski.School.THOP.Services.Models;assembly=Oiski.School.THOP.Services"
              x:Class="Oiski.School.THOP.App.Views.GraphPage"
              x:DataType="viewModels:GraphViewModel">
 

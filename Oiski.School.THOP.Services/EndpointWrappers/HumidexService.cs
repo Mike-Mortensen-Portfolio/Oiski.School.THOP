@@ -13,7 +13,7 @@ namespace Oiski.School.THOP.Services
         private readonly HttpClient _client;
 
         /// <summary>
-        /// The details that defines 
+        /// The details that defines the current device
         /// </summary>
         public DeviceDetails DeviceDetails { get; set; }
 

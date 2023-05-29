@@ -2,6 +2,11 @@
 @import url('colors.css');
 @import url('thop_elements.css');
 
+:root {
+    --rz-switch-circle-background-color: var(--gray-500) !important;
+    --rz-switch-checked-circle-background-color: var(--tertiary) !important;
+}
+
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     background-color: var(--primary);
@@ -14,6 +19,14 @@ html, body {
 
 .rz-chart svg {
     overflow: visible;
+}
+
+.rz-switch .rz-switch-circle {
+    background: var(--secondary) !important;
+}
+
+.rz-switch.rz-switch-checked .rz-switch-circle {
+    color: var(--tertiary) !important;
 }
 
 h1:focus {

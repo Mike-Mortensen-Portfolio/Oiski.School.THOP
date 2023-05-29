@@ -5,6 +5,7 @@
 @using System.Globalization;
 @using Oiski.School.THOP.Services;
 @inject HumidexServiceScope service;
+@inject ILogger<Analytics> logger;
 
 <PageTitle>Analytics</PageTitle>
 
@@ -18,28 +19,30 @@
                 <RadzenCheckBox @bind-Value="@showDataLabels" Name="dataLabels"></RadzenCheckBox>
                 <RadzenLabel Text="Show Data Labels" For="dataLabels" />
             </RadzenCard>
-            <RadzenChart>
-                <RadzenLegend Position="LegendPosition.Top" />
-                <RadzenLineSeries Smooth="@smooth" Data="@readings" CategoryProperty="Time" Title="Humidity" LineType="LineType.Dashed" ValueProperty="Humidity">
-                    <RadzenMarkers MarkerType="MarkerType.Circle" />
-                    <RadzenSeriesDataLabels Visible="@showDataLabels" />
-                </RadzenLineSeries>
-                <RadzenLineSeries Smooth="@smooth" Data="@readings" CategoryProperty="Time" Title="Temperature" ValueProperty="Temperature">
-                    <RadzenMarkers MarkerType="MarkerType.Circle" />
-                    <RadzenSeriesDataLabels Visible="@showDataLabels" />
-                </RadzenLineSeries>
-                <RadzenCategoryAxis Stroke="rgba(41, 31, 30, 1)" Padding="20" Formatter="@FormatAsEUTime">
-                    <RadzenTicks>
-                        <Template>
-                            <text class="rz-tick-text" style="text-anchor: start; transform: translate(@(Math.Truncate(context.X))px, @(Math.Truncate(context.Y + 10))px) rotate(45deg)">@context.Value</text>
-                        </Template>
-                    </RadzenTicks>
-                </RadzenCategoryAxis>
-                <RadzenValueAxis Stroke="rgba(41, 31, 30, 1)">
-                    <RadzenGridLines Stroke="rgba(41, 31, 30, 1)" Visible="true" />
-                    <RadzenAxisTitle Text="Value" />
-                </RadzenValueAxis>
-            </RadzenChart>
+            <div class="ps-5 pe-5">
+                <RadzenChart>
+                    <RadzenLegend Position="LegendPosition.Top" />
+                    <RadzenLineSeries Smooth="@smooth" Data="@readings" CategoryProperty="Time" Title="Humidity" LineType="LineType.Dashed" ValueProperty="Humidity">
+                        <RadzenMarkers MarkerType="MarkerType.Circle" />
+                        <RadzenSeriesDataLabels Visible="@showDataLabels" />
+                    </RadzenLineSeries>
+                    <RadzenLineSeries Smooth="@smooth" Data="@readings" CategoryProperty="Time" Title="Temperature" ValueProperty="Temperature">
+                        <RadzenMarkers MarkerType="MarkerType.Circle" />
+                        <RadzenSeriesDataLabels Visible="@showDataLabels" />
+                    </RadzenLineSeries>
+                    <RadzenCategoryAxis Stroke="rgba(41, 31, 30, 1)" Padding="20" Formatter="@FormatAsEUTime">
+                        <RadzenTicks>
+                            <Template>
+                                <text class="rz-tick-text" style="text-anchor: start; transform: translate(@(Math.Truncate(context.X))px, @(Math.Truncate(context.Y + 10))px) rotate(45deg)">@context.Value</text>
+                            </Template>
+                        </RadzenTicks>
+                    </RadzenCategoryAxis>
+                    <RadzenValueAxis Stroke="rgba(41, 31, 30, 1)">
+                        <RadzenGridLines Stroke="rgba(41, 31, 30, 1)" Visible="true" />
+                        <RadzenAxisTitle Text="Value" />
+                    </RadzenValueAxis>
+                </RadzenChart>
+            </div>
         </div>
     </div>
     <div class="mt-4 row">
@@ -57,6 +60,7 @@
 </div>
 
 @code {
+    QuickAction currentAction = QuickAction.Hours24;
     bool smooth = false;
     bool showDataLabels = false;
 
@@ -75,14 +79,31 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await PerformQuickAction(QuickAction.Hours24);
+        await PerformQuickAction(currentAction);
 
         await base.OnInitializedAsync();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            using var timer = new PeriodicTimer(TimeSpan.FromMinutes(2));
+            while (await timer.WaitForNextTickAsync())
+            {
+                await PerformQuickAction(currentAction);
+                StateHasChanged();
+            }
+        }
+
+        await base.OnAfterRenderAsync(firstRender);
     }
 
     async Task PerformQuickAction(QuickAction action)
     {
         var date = DateTime.Now;
+
+        currentAction = action;
 
         if (action != QuickAction.None)
         {
@@ -114,6 +135,7 @@
 
     async Task PullHumidex()
     {
+        logger.LogInformation("Fetching graph data");
         readings = await service.GetAllAsync(new HumidexOptions
             {
                 StartTime = startDate.Add(startTime),

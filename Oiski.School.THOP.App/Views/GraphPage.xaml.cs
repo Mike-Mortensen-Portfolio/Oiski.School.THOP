@@ -4,6 +4,7 @@ using LiveChartsCore.SkiaSharpView;
 using Oiski.School.THOP.App.Models;
 using Oiski.School.THOP.App.Services;
 using Oiski.School.THOP.App.ViewModels;
+using Oiski.School.THOP.Services.Models;
 using System.Globalization;
 
 namespace Oiski.School.THOP.App.Views;
