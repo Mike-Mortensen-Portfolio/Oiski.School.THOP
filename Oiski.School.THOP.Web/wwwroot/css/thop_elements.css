@@ -1,0 +1,45 @@
+﻿.border-tertiary {
+    border-color: var(--tertiary) !important;
+}
+
+.text-tertiary {
+    border-color: var(--tertiary) !important;
+}
+
+.bg-primary {
+    background-color: var(--primary);
+}
+
+.bg-secondary {
+    background-color: var(--secondary);
+}
+
+.bg-tertiary {
+    background-color: var(--tertiary);
+}
+
+.bg-gray-500 {
+    background-color: var(--gray-500);
+}
+
+.bg-gray-600 {
+    background-color: var(--gray-600);
+}
+
+.border-flat {
+    border-radius: 0px !important;
+}
+
+.btn-secondary {
+    color: var(--primary);
+    background-color: var(--secondary);
+}
+
+.btn-cyan {
+    color: var(--primary);
+    background-color: var(--cyan);
+}
+
+    .btn-secondary:hover, .btn-cyan:hover {
+        color: var(--tertiary);
+    }

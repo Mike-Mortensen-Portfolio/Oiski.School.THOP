@@ -1,10 +1,19 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 @import url('colors.css');
+@import url('thop_elements.css');
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     background-color: var(--primary);
     color: var(--cyan);
+}
+
+.rz-tick-text, .rz-axis-title, .rz-series-data-label {
+    fill: var(--tertiary) !important;
+}
+
+.rz-chart svg {
+    overflow: visible;
 }
 
 h1:focus {
@@ -17,8 +26,8 @@ a, .btn-link {
 
 .btn-primary {
     color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
+    background-color: var(--primary);
+    border-color: var(--primary);
 }
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {

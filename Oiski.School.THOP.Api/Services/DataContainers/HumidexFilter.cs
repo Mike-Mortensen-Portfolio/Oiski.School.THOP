@@ -1,4 +1,5 @@
-﻿using Oiski.School.THOP.Services.Models;
+﻿using CsvHelper.Configuration.Attributes;
+using Oiski.School.THOP.Services.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace Oiski.School.THOP.Api.Services.DataContainers

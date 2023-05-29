@@ -1,5 +1,7 @@
 ﻿using Oiski.School.THOP.Services.Models;
+using System.Globalization;
 using System.Net.Http.Json;
+using System.Web;
 
 namespace Oiski.School.THOP.Services
 {
@@ -41,8 +43,8 @@ namespace Oiski.School.THOP.Services
                     MaxCount = null
                 };
 
-            var startTime = ((options.StartTime != null) ? ($"&StartTime={options.StartTime.Value.ToUniversalTime():yyyy-MM-ddTHH:mm:ss.fffZ}") : (null));
-            var endTime = ((options.EndTime != null) ? ($"&EndTime={options.EndTime.Value.ToUniversalTime():yyyy-MM-ddTHH:mm:ss.fffZ}") : (null));
+            var startTime = ((options.StartTime != null) ? ($"&StartTime={options.StartTime.Value.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture)}") : (null));
+            var endTime = ((options.EndTime != null) ? ($"&EndTime={options.EndTime.Value.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture)}") : (null));
             var maxCount = ((options.MaxCount != null) ? ($"&MaxCount={options.MaxCount.Value}") : (null));
             var query = $"Sensor={options.Sensor}&LocationId={options.LocationId}{startTime ?? string.Empty}{endTime ?? string.Empty}{maxCount ?? string.Empty}";
 

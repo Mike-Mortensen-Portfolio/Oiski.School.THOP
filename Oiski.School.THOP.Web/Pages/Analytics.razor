@@ -1,9 +1,85 @@
-﻿@page "/Analaytics"
+﻿@page "/Analytics"
+@using Oiski.School.THOP.Services.Models;
+@using Oiski.School.THOP.Web.Services;
+@using Radzen.Blazor
+@using System.Globalization;
+@using Oiski.School.THOP.Services;
+@inject HumidexServiceScope service;
 
-<h3>Analytics</h3>
+<PageTitle>Analytics</PageTitle>
 
-<PageTitle></PageTitle>
+<div class="container">
+    <div class="mt-2 row">
+        <h2 class="text-center">Humidex (home)</h2>
+    </div>
+    <div class="row overflow-hidden">
+        <div class="col-12 shadow bg-gray-500 p-3" Style="height:500px;">
+            <RadzenCard class="w-100 mb-4 bg-secondary" Style="display: flex; align-items: center; gap: 0.5rem">
+                <RadzenCheckBox @bind-Value="@showDataLabels" Name="dataLabels"></RadzenCheckBox>
+                <RadzenLabel Text="Show Data Labels" For="dataLabels" />
+            </RadzenCard>
+            <RadzenChart>
+                <RadzenLegend Position="LegendPosition.Top" />
+                <RadzenLineSeries Smooth="@smooth" Data="@readings" CategoryProperty="Time" Title="Humidity" LineType="LineType.Dashed" ValueProperty="Humidity">
+                    <RadzenMarkers MarkerType="MarkerType.Circle" />
+                    <RadzenSeriesDataLabels Visible="@showDataLabels" />
+                </RadzenLineSeries>
+                <RadzenLineSeries Smooth="@smooth" Data="@readings" CategoryProperty="Time" Title="Temperature" ValueProperty="Temperature">
+                    <RadzenMarkers MarkerType="MarkerType.Circle" />
+                    <RadzenSeriesDataLabels Visible="@showDataLabels" />
+                </RadzenLineSeries>
+                <RadzenCategoryAxis Stroke="rgba(41, 31, 30, 1)" Padding="20" Formatter="@FormatAsEUTime">
+                    <RadzenTicks>
+                        <Template>
+                            <text class="rz-tick-text" style="text-anchor: start; transform: translate(@(Math.Truncate(context.X))px, @(Math.Truncate(context.Y + 10))px) rotate(45deg)">@context.Value</text>
+                        </Template>
+                    </RadzenTicks>
+                </RadzenCategoryAxis>
+                <RadzenValueAxis Stroke="rgba(41, 31, 30, 1)">
+                    <RadzenGridLines Stroke="rgba(41, 31, 30, 1)" Visible="true" />
+                    <RadzenAxisTitle Text="Value" />
+                </RadzenValueAxis>
+            </RadzenChart>
+        </div>
+    </div>
+    <div class="mt-4 row">
+        <h2 class="text-center">Quick Actions</h2>
+    </div>
+    <div class="row">
+        <div class="col-1"><!--Filler--></div>
+        <div class="col-10 text-center">
+            <button style="width:250px; height:50px; font-size:20px;" class="me-3 btn btn-secondary border-flat">Last 60 min.</button>
+            <button style="width:250px; height:50px; font-size:20px;" class="me-3 btn btn-secondary border-flat">Last 24 hours</button>
+            <button style="width:250px; height:50px; font-size:20px;" class="btn btn-secondary border-flat">Last 7 days</button>
+        </div>
+        <div class="col-1"><!--Filler--></div>
+    </div>
+</div>
 
 @code {
+    bool smooth = false;
+    bool showDataLabels = false;
 
+    string FormatAsEUTime(object value)
+    {
+        return ((DateTime)value).ToLocalTime().ToString("dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+    }
+
+    List<HumidexDto> readings = new List<HumidexDto>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await PullHumidex();
+
+        await base.OnInitializedAsync();
+    }
+
+    async Task PullHumidex()
+    {
+        readings = await service.GetAllAsync(new HumidexOptions
+            {
+                StartTime = DateTime.Now.AddHours(-24),
+                EndTime = DateTime.Now
+            });
+    }
 }
