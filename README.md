@@ -307,14 +307,20 @@ true
 ---
 
 ## Change Log
+- **[v1.1.0-Dev](https://github.com/Mike-Mortensen-Portfolio/Oiski.School.THOP/releases/tag/v1.1.0-Dev)**
+    - **Added**
+        - Blazor server project as web solution (_`Oiski.School.THOP.Web`_)
+        - Added control view (_/Overview_)
+        - Added Graph view (_/Analytics_)
+        - Added Peripheral control
+- **[v1.0.1-Dev](https://github.com/Mike-Mortensen-Portfolio/Oiski.School.THOP/releases/tag/v1.0.1-Dev)**
+    - **Added**
+        - Moved all common code into a service project (_`Oiski.School.THOP.Services`_)
+        - Added more documentation to the codebase
  - **[v1.0.0-Dev](https://github.com/Mike-Mortensen-Portfolio/Oiski.School.THOP/releases/tag/v1.0.0-Dev)**
    - **Added**
      - API with basic endpoints for controlling peripheral components and query telemetry data
          - MQTTNET Client as a mediater between the HiveMQ broker and the .NET API
      - Android Application to interact with through the API
-- **[v1.0.1-Dev](https://github.com/Mike-Mortensen-Portfolio/Oiski.School.THOP/releases/tag/v1.0.1-Dev)**
-    - **Added**
-        - Moved all common code into a service project (_`Oiski.School.THOP.Services`_)
-        - Added more documentation to the codebase
 
 <p align="right"><strong><a href="#introduction">^ To Top ^</a></strong></p>
