@@ -48,9 +48,9 @@
     <div class="row">
         <div class="col-1"><!--Filler--></div>
         <div class="col-10 text-center">
-            <button style="width:250px; height:50px; font-size:20px;" class="me-3 btn btn-secondary border-flat">Last 60 min.</button>
-            <button style="width:250px; height:50px; font-size:20px;" class="me-3 btn btn-secondary border-flat">Last 24 hours</button>
-            <button style="width:250px; height:50px; font-size:20px;" class="btn btn-secondary border-flat">Last 7 days</button>
+            <button style="width:250px; height:50px; font-size:20px;" class="me-3 btn btn-secondary border-flat" @onclick="@(async () => await PerformQuickAction (QuickAction.Minutes60))">Last 60 min.</button>
+            <button style="width:250px; height:50px; font-size:20px;" class="me-3 btn btn-secondary border-flat" @onclick="@(async () => await PerformQuickAction (QuickAction.Hours24))">Last 24 hours</button>
+            <button style="width:250px; height:50px; font-size:20px;" class="btn btn-secondary border-flat" @onclick="@(async () => await PerformQuickAction (QuickAction.Days7))">Last 7 days</button>
         </div>
         <div class="col-1"><!--Filler--></div>
     </div>
@@ -59,6 +59,12 @@
 @code {
     bool smooth = false;
     bool showDataLabels = false;
+
+    DateTime startDate;
+    DateTime endDate;
+    TimeSpan startTime;
+    TimeSpan endTime;
+
 
     string FormatAsEUTime(object value)
     {
@@ -69,17 +75,49 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await PullHumidex();
+        await PerformQuickAction(QuickAction.Hours24);
 
         await base.OnInitializedAsync();
+    }
+
+    async Task PerformQuickAction(QuickAction action)
+    {
+        var date = DateTime.Now;
+
+        if (action != QuickAction.None)
+        {
+            endDate = date.Date;
+            endTime = date.TimeOfDay;
+        }
+
+        switch (action)
+        {
+            case QuickAction.Minutes60:
+                date = date.AddMinutes(-60);
+                startDate = date.Date;
+                startTime = date.TimeOfDay;
+                break;
+            case QuickAction.Hours24:
+                date = date.AddHours(-24);
+                startDate = date.Date;
+                startTime = date.TimeOfDay;
+                break;
+            case QuickAction.Days7:
+                date = date.AddDays(-7);
+                startDate = date.Date;
+                startTime = date.TimeOfDay;
+                break;
+        }
+
+        await PullHumidex();
     }
 
     async Task PullHumidex()
     {
         readings = await service.GetAllAsync(new HumidexOptions
             {
-                StartTime = DateTime.Now.AddHours(-24),
-                EndTime = DateTime.Now
+                StartTime = startDate.Add(startTime),
+                EndTime = endDate.Add(endTime)
             });
     }
 }

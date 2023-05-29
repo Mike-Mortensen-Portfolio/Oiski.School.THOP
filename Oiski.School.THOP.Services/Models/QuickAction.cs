@@ -1,4 +1,4 @@
-﻿namespace Oiski.School.THOP.App.Models
+﻿namespace Oiski.School.THOP.Services.Models
 {
     public enum QuickAction
     {
