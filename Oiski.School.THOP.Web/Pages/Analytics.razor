@@ -16,19 +16,19 @@
     <div class="row overflow-hidden shadow">
         <div class="col-12 shadow bg-gray-500 p-3" Style="height:500px;">
             <RadzenCard class="w-100 mb-4 bg-secondary" Style="display: flex; align-items: center; gap: 0.5rem">
-                <RadzenCheckBox @bind-Value="@showDataLabels" Name="dataLabels"></RadzenCheckBox>
+                <RadzenCheckBox @bind-Value="@_showDataLabels" Name="dataLabels"></RadzenCheckBox>
                 <RadzenLabel Text="Show Data Labels" For="dataLabels" />
             </RadzenCard>
             <div class="ps-5 pe-5">
                 <RadzenChart>
                     <RadzenLegend Position="LegendPosition.Top" />
-                    <RadzenLineSeries Smooth="@smooth" Data="@readings" CategoryProperty="Time" Title="Humidity" LineType="LineType.Dashed" ValueProperty="Humidity">
+                    <RadzenLineSeries Smooth="@_smooth" Data="@readings" CategoryProperty="Time" Title="Humidity" LineType="LineType.Dashed" ValueProperty="Humidity">
                         <RadzenMarkers MarkerType="MarkerType.Circle" />
-                        <RadzenSeriesDataLabels Visible="@showDataLabels" />
+                        <RadzenSeriesDataLabels Visible="@_showDataLabels" />
                     </RadzenLineSeries>
-                    <RadzenLineSeries Smooth="@smooth" Data="@readings" CategoryProperty="Time" Title="Temperature" ValueProperty="Temperature">
+                    <RadzenLineSeries Smooth="@_smooth" Data="@readings" CategoryProperty="Time" Title="Temperature" ValueProperty="Temperature">
                         <RadzenMarkers MarkerType="MarkerType.Circle" />
-                        <RadzenSeriesDataLabels Visible="@showDataLabels" />
+                        <RadzenSeriesDataLabels Visible="@_showDataLabels" />
                     </RadzenLineSeries>
                     <RadzenCategoryAxis Stroke="rgba(41, 31, 30, 1)" Padding="20" Formatter="@FormatAsEUTime">
                         <RadzenTicks>
@@ -51,7 +51,7 @@
     <div class="row">
         <div class="col-1"><!--Filler--></div>
         <div class="col-10 text-center">
-            @if (isBusy)
+            @if (_isBusy)
             {
                 <label style="width:250px; height:50px; font-size:20px;" class="me-3 btn bg-gray-600 border-flat">Last 60 min.</label>
                 <label style="width:250px; height:50px; font-size:20px;" class="me-3 btn bg-gray-600 border-flat">Last 24 hours</label>
@@ -59,7 +59,7 @@
             }
             else
             {
-                switch (currentAction)
+                switch (_currentAction)
                 {
                     case QuickAction.Minutes60:
                         <label style="width:250px; height:50px; font-size:20px;" class="me-3 btn bg-gray-600 border-flat">Last 60 min.</label>
@@ -84,15 +84,15 @@
 </div>
 
 @code {
-    QuickAction currentAction = QuickAction.Hours24;
-    bool smooth = false;
-    bool showDataLabels = false;
-    bool isBusy = false;
+    QuickAction _currentAction = QuickAction.Hours24;
+    bool _smooth = false;
+    bool _showDataLabels = false;
+    bool _isBusy = false;
 
-    DateTime startDate;
-    DateTime endDate;
-    TimeSpan startTime;
-    TimeSpan endTime;
+    DateTime _startDate;
+    DateTime _endDate;
+    TimeSpan _startTime;
+    TimeSpan _endTime;
 
 
     string FormatAsEUTime(object value)
@@ -104,7 +104,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await PerformQuickAction(currentAction);
+        await PerformQuickAction(_currentAction);
 
         await base.OnInitializedAsync();
     }
@@ -116,7 +116,7 @@
             using var timer = new PeriodicTimer(TimeSpan.FromMinutes(2));
             while (await timer.WaitForNextTickAsync())
             {
-                await PerformQuickAction(currentAction);
+                await PerformQuickAction(_currentAction);
                 StateHasChanged();
             }
         }
@@ -126,39 +126,39 @@
 
     async Task PerformQuickAction(QuickAction action)
     {
-        isBusy = true;
+        _isBusy = true;
         var date = DateTime.Now;
 
-        currentAction = action;
+        _currentAction = action;
 
         if (action != QuickAction.None)
         {
-            endDate = date.Date;
-            endTime = date.TimeOfDay;
+            _endDate = date.Date;
+            _endTime = date.TimeOfDay;
         }
 
         switch (action)
         {
             case QuickAction.Minutes60:
                 date = date.AddMinutes(-60);
-                startDate = date.Date;
-                startTime = date.TimeOfDay;
+                _startDate = date.Date;
+                _startTime = date.TimeOfDay;
                 break;
             case QuickAction.Hours24:
                 date = date.AddHours(-24);
-                startDate = date.Date;
-                startTime = date.TimeOfDay;
+                _startDate = date.Date;
+                _startTime = date.TimeOfDay;
                 break;
             case QuickAction.Days7:
                 date = date.AddDays(-7);
-                startDate = date.Date;
-                startTime = date.TimeOfDay;
+                _startDate = date.Date;
+                _startTime = date.TimeOfDay;
                 break;
         }
 
         await PullHumidex();
 
-        isBusy = false;
+        _isBusy = false;
     }
 
     async Task PullHumidex()
@@ -166,8 +166,8 @@
         logger.LogInformation("Fetching graph data");
         readings = await service.GetAllAsync(new HumidexOptions
             {
-                StartTime = startDate.Add(startTime),
-                EndTime = endDate.Add(endTime)
+                StartTime = _startDate.Add(_startTime),
+                EndTime = _endDate.Add(_endTime)
             });
     }
 }
