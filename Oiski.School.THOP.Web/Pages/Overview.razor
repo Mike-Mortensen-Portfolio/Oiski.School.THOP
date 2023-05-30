@@ -7,6 +7,7 @@
 @inject HumidexServiceScope humidexService;
 @inject PeripheralServiceScope peripheralService;
 @inject ILogger<Overview> logger;
+@inject IHttpClientFactory factory;
 
 <PageTitle>Overview</PageTitle>
 
@@ -97,6 +98,23 @@
 
     protected override async Task OnInitializedAsync()
     {
+
+        var client = factory.CreateClient();
+        client.BaseAddress = new Uri("https://school-tenant.eu.auth0.com/");
+
+        var response = await client.PostAsJsonAsync("oauth/token", new
+        {
+            client_id = "6wAXu6uhwqCO7SMiFfdfGpzLmpWKi8ZW",
+            client_secret = "QBg3fUGI2Gt6ViC6uRI_SsFFGreDr0zhjkd78-s0W-c2BPFpWs1lkjaIiWz1nwLY",
+            audience = "https://Thop/data",
+            grant_type = "client_credentials"
+        });
+
+        if (response.IsSuccessStatusCode)
+        {
+            var contentAsString = await response.Content.ReadAsStringAsync();
+        }
+
         _latestReading = await GetLatestReadingAsync() ?? new HumidexDto();
 
         await base.OnInitializedAsync();

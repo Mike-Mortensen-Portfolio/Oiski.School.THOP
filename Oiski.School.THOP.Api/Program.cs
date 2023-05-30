@@ -1,15 +1,18 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using Oiski.School.THOP.Api;
+using Oiski.School.THOP.Api.Auth0;
 using Oiski.School.THOP.Api.Services.DataContainers;
 using Oiski.School.THOP.Api.Services.Influx;
 using Oiski.School.THOP.Api.Services.MQTT;
 using Oiski.School.THOP.Services.Models;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<InfluxService>();
@@ -18,9 +21,31 @@ builder.Services.AddSingleton((provider) =>
     return new MyMQTTClient(Console.WriteLine);
 });
 builder.HookMQTTWorker();
+var domain = $"https://{builder.Configuration["Security:Domain"]}/";
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.Authority = domain;
+        options.Audience = builder.Configuration["Security:Audience"];
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            NameClaimType = ClaimTypes.NameIdentifier
+        };
+    });
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("read:humidex", policy => policy.Requirements.Add(new HasScopeRequirement("read:humidex", domain)));
+    options.AddPolicy("write:peripheral", policy => policy.Requirements.Add(new HasScopeRequirement("write:peripheral", domain)));
+});
+
+builder.Services.AddSingleton<IAuthorizationHandler, HasScopeHandler>();
+
 builder.Services.AddCors();
 
 var app = builder.Build();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -87,7 +112,8 @@ thopEndpoints.MapGet("humidex", async ([AsParameters] HumidexFilter filter, Infl
         data = data.Take(filter.MaxCount.Value);
 
     return Results.Ok(data.ToList());
-});
+})
+    .RequireAuthorization("read:humidex");
 
 thopEndpoints.MapPost("ventilation", async ([FromBody] StateOptions options, MyMQTTClient client) =>
 {
@@ -109,7 +135,8 @@ thopEndpoints.MapPost("ventilation", async ([FromBody] StateOptions options, MyM
         Vents = ((options.On) ? ("On") : ("Off")),
         StatusCode = result
     });
-});
+})
+    .RequireAuthorization("write:peripheral");
 
 thopEndpoints.MapPost("light", async ([FromBody] StateOptions options, MyMQTTClient client) =>
 {
@@ -131,13 +158,15 @@ thopEndpoints.MapPost("light", async ([FromBody] StateOptions options, MyMQTTCli
         Lights = ((options.On) ? ("On") : ("Off")),
         StatusCode = result
     });
-});
+})
+    .RequireAuthorization("write:peripheral");
 
 thopEndpoints.MapGet("killHumidex", () =>
 {
     ManualError.ErrorThrow = !ManualError.ErrorThrow;
 
     return Results.Ok(ManualError.ErrorThrow);
-});
+})
+    .RequireAuthorization();
 
 app.Run();
