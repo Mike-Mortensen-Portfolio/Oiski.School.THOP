@@ -57,7 +57,12 @@
         "Oiski.School.THOP.Api": {},
         "Oiski.School.THOP.App": {}
       }
+    },
+    "Api + Web": {
+      "Projects": {
+        "Oiski.School.THOP.Api": {},
+        "Oiski.School.THOP.Web": {}
+      }
     }
   }
-
 }
