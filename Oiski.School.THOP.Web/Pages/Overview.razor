@@ -1,6 +1,5 @@
 ﻿@page "/"
 @page "/Overview"
-@implements IDisposable
 @using Oiski.School.THOP.Services.Models;
 @using Oiski.School.THOP.Web.Services;
 @using System.Globalization;
@@ -16,16 +15,16 @@
         <div class="col-2"><!--Filler--></div>
         <div class="col-8 shadow bg-gray-600">
             <div class="mt-3 row text-cyan">
-                <h3 class="text-center">Latest Readings (@locationId)</h3>
+                <h3 class="text-center">Latest Readings (@_locationId)</h3>
             </div>
-            <p class="m-0 text-center">@latestReading.Time?.ToLocalTime().ToString(CultureInfo.InvariantCulture) (Local)</p>
+            <p class="m-0 text-center">@_latestReading.Time?.ToLocalTime().ToString(CultureInfo.InvariantCulture) (Local)</p>
             <div class="p-5 pt-2 row text-center fw-bold">
                 <div class="p-5 col-5 border border-secondary rounded">
-                    <h1 class="m-0">@latestReading.Temperature.ToString("F1", CultureInfo.InvariantCulture)°C</h1>
+                    <h1 class="m-0">@_latestReading.Temperature.ToString("F1", CultureInfo.InvariantCulture)°C</h1>
                 </div>
                 <div class="col-2"><!--Filler--></div>
                 <div class="p-5 col-5 border border-secondary rounded">
-                    <h1 class="m-0">@latestReading.Humidity.ToString("F1", CultureInfo.InvariantCulture)% RH</h1>
+                    <h1 class="m-0">@_latestReading.Humidity.ToString("F1", CultureInfo.InvariantCulture)% RH</h1>
                 </div>
             </div>
         </div>
@@ -39,7 +38,7 @@
         <div class="col-2"><!--Filler--></div>
         <div class="col-8 shadow bg-gray-600">
             <div class="mt-2 row text-cyan">
-                <h3 class="text-center">Peripherals (@locationId)</h3>
+                <h3 class="text-center">Peripherals (@_locationId)</h3>
             </div>
             <div class="ps-5 pe-5 row text-center">
                 <div class="p-3 col-5">
@@ -47,7 +46,7 @@
                 </div>
                 <div class="col-2"><!--Filler--></div>
                 <div class="p-3 col-5">
-                    <Radzen.Blazor.RadzenSwitch ValueChanged="@(async (state) => await peripheralService.OpenVentsAsync (locationId, deviceId, state))" />
+                    <Radzen.Blazor.RadzenSwitch ValueChanged="@(async (state) => await peripheralService.OpenVentsAsync (_locationId, _deviceId, state))" />
                 </div>
             </div>
             <div class="ps-5 pe-5 row text-center">
@@ -56,7 +55,7 @@
                 </div>
                 <div class="col-2"><!--Filler--></div>
                 <div class="p-3 col-5">
-                    <Radzen.Blazor.RadzenSwitch ValueChanged="@(async (state) => await peripheralService.LightsOnAsync (locationId, deviceId, state))" />
+                    <Radzen.Blazor.RadzenSwitch ValueChanged="@(async (state) => await peripheralService.LightsOnAsync (_locationId, _deviceId, state))" />
                 </div>
             </div>
         </div>
@@ -78,18 +77,13 @@
             </div>
             <div class="ps-5 pe-5 pt-2 row text-center fw-bold">
                 <div class="p-2 pb-4 col-5">
-                    <InputText class="textfield w-100 text-center" Value="@locationId" ValueChanged="@(async (value) => {locationId = value; latestReading = await GetLatestReadingAsync() ?? new HumidexDto();})" ValueExpression="@(() => locationId)" />
+                    <InputText class="textfield w-100 text-center" Value="@_locationId" ValueChanged="@(async (value) => {_locationId = value; _latestReading = await GetLatestReadingAsync() ?? new HumidexDto();})" ValueExpression="@(() => _locationId)" />
                 </div>
                 <div class="col-2"><!--Filler--></div>
                 <div class="p-2 pb-4 col-5">
-                    <InputText class="textfield w-100 text-center" @bind-Value="deviceId" />
+                    <InputText class="textfield w-100 text-center" @bind-Value="_deviceId" />
                 </div>
             </div>
-            @*            <div class="pb-3 row">
-            <div class="col-4"><!--Filler--></div>
-            <button class="col-4 btn btn-tertiary">Save</button>
-            <div class="col-4"><!--Filler--></div>
-            </div>*@
         </div>
         <div class="col-2"><!--Filler--></div>
     </div>
@@ -97,14 +91,13 @@
 
 
 @code {
-    HumidexDto latestReading = new HumidexDto();
-    string locationId = "home";
-    string deviceId = "oiski_1010";
-    Timer timer = null!;
+    private HumidexDto _latestReading = new HumidexDto();
+    private string _locationId = "home";
+    private string _deviceId = "oiski_1010";
 
     protected override async Task OnInitializedAsync()
     {
-        latestReading = await GetLatestReadingAsync() ?? new HumidexDto();
+        _latestReading = await GetLatestReadingAsync() ?? new HumidexDto();
 
         await base.OnInitializedAsync();
     }
@@ -116,7 +109,7 @@
             using var timer = new PeriodicTimer(TimeSpan.FromMinutes(2));
             while (await timer.WaitForNextTickAsync())
             {
-                latestReading = await GetLatestReadingAsync() ?? new HumidexDto();
+                _latestReading = await GetLatestReadingAsync() ?? new HumidexDto();
                 StateHasChanged();
             }
         }
@@ -124,18 +117,13 @@
         await base.OnAfterRenderAsync(firstRender);
     }
 
-    async Task<HumidexDto?> GetLatestReadingAsync()
+    private async Task<HumidexDto?> GetLatestReadingAsync()
     {
         logger.LogInformation("Fetching latest reading");
         return (await humidexService.GetAllAsync(new HumidexOptions
             {
-                LocationId = locationId,
+                LocationId = _locationId,
                 MaxCount = 1
             })).FirstOrDefault();
-    }
-
-    public void Dispose()
-    {
-        timer?.Dispose();
     }
 }

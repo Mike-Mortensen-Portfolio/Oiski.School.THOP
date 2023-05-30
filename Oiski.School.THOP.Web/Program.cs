@@ -9,7 +9,7 @@ builder.Services.AddScoped<HumidexServiceScope>();
 builder.Services.AddScoped<PeripheralServiceScope>();
 builder.Services.AddHttpClient("THOP_Api", client =>
 {
-    client.BaseAddress = new Uri("https://kvttffdl-7055.euw.devtunnels.ms");    //  Api uses a Dev Tunnel
+    client.BaseAddress = new Uri("https://nb4pqt6j-7055.euw.devtunnels.ms");    //  Api uses a Dev Tunnel
 });
 
 var app = builder.Build();

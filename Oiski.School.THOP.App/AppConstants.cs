@@ -2,6 +2,6 @@
 {
     public class AppConstants
     {
-        public const string TUNNEL_URL = "https://kvttffdl-7055.euw.devtunnels.ms";
+        public const string TUNNEL_URL = "https://nb4pqt6j-7055.euw.devtunnels.ms";
     }
 }

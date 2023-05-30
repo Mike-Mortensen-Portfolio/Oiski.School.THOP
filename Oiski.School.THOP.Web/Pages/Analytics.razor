@@ -13,7 +13,7 @@
     <div class="mt-2 row">
         <h2 class="text-center">Humidex (home)</h2>
     </div>
-    <div class="row overflow-hidden">
+    <div class="row overflow-hidden shadow">
         <div class="col-12 shadow bg-gray-500 p-3" Style="height:500px;">
             <RadzenCard class="w-100 mb-4 bg-secondary" Style="display: flex; align-items: center; gap: 0.5rem">
                 <RadzenCheckBox @bind-Value="@showDataLabels" Name="dataLabels"></RadzenCheckBox>
@@ -51,9 +51,33 @@
     <div class="row">
         <div class="col-1"><!--Filler--></div>
         <div class="col-10 text-center">
-            <button style="width:250px; height:50px; font-size:20px;" class="me-3 btn btn-secondary border-flat" @onclick="@(async () => await PerformQuickAction (QuickAction.Minutes60))">Last 60 min.</button>
-            <button style="width:250px; height:50px; font-size:20px;" class="me-3 btn btn-secondary border-flat" @onclick="@(async () => await PerformQuickAction (QuickAction.Hours24))">Last 24 hours</button>
-            <button style="width:250px; height:50px; font-size:20px;" class="btn btn-secondary border-flat" @onclick="@(async () => await PerformQuickAction (QuickAction.Days7))">Last 7 days</button>
+            @if (isBusy)
+            {
+                <label style="width:250px; height:50px; font-size:20px;" class="me-3 btn bg-gray-600 border-flat">Last 60 min.</label>
+                <label style="width:250px; height:50px; font-size:20px;" class="me-3 btn bg-gray-600 border-flat">Last 24 hours</label>
+                <label style="width:250px; height:50px; font-size:20px;" class="btn bg-gray-600 border-flat">Last 7 days</label>
+            }
+            else
+            {
+                switch (currentAction)
+                {
+                    case QuickAction.Minutes60:
+                        <label style="width:250px; height:50px; font-size:20px;" class="me-3 btn bg-gray-600 border-flat">Last 60 min.</label>
+                        <button style="width:250px; height:50px; font-size:20px;" class="me-3 btn btn-secondary border-flat" @onclick="@(async () => await PerformQuickAction (QuickAction.Hours24))">Last 24 hours</button>
+                        <button style="width:250px; height:50px; font-size:20px;" class="btn btn-secondary border-flat" @onclick="@(async () => await PerformQuickAction (QuickAction.Days7))">Last 7 days</button>
+                        break;
+                    case QuickAction.Hours24:
+                        <button style="width:250px; height:50px; font-size:20px;" class="me-3 btn btn-secondary border-flat" @onclick="@(async () => await PerformQuickAction (QuickAction.Minutes60))">Last 60 min.</button>
+                        <label style="width:250px; height:50px; font-size:20px;" class="me-3 btn bg-gray-600 border-flat">Last 24 hours</label>
+                        <button style="width:250px; height:50px; font-size:20px;" class="btn btn-secondary border-flat" @onclick="@(async () => await PerformQuickAction (QuickAction.Days7))">Last 7 days</button>
+                        break;
+                    case QuickAction.Days7:
+                        <button style="width:250px; height:50px; font-size:20px;" class="me-3 btn btn-secondary border-flat" @onclick="@(async () => await PerformQuickAction (QuickAction.Minutes60))">Last 60 min.</button>
+                        <button style="width:250px; height:50px; font-size:20px;" class="me-3 btn btn-secondary border-flat" @onclick="@(async () => await PerformQuickAction (QuickAction.Hours24))">Last 24 hours</button>
+                        <label style="width:250px; height:50px; font-size:20px;" class="btn bg-gray-600 border-flat">Last 7 days</label>
+                        break;
+                }
+            }
         </div>
         <div class="col-1"><!--Filler--></div>
     </div>
@@ -63,6 +87,7 @@
     QuickAction currentAction = QuickAction.Hours24;
     bool smooth = false;
     bool showDataLabels = false;
+    bool isBusy = false;
 
     DateTime startDate;
     DateTime endDate;
@@ -101,6 +126,7 @@
 
     async Task PerformQuickAction(QuickAction action)
     {
+        isBusy = true;
         var date = DateTime.Now;
 
         currentAction = action;
@@ -131,6 +157,8 @@
         }
 
         await PullHumidex();
+
+        isBusy = false;
     }
 
     async Task PullHumidex()

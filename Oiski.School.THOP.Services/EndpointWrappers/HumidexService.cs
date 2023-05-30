@@ -1,7 +1,8 @@
 ﻿using Oiski.School.THOP.Services.Models;
 using System.Globalization;
 using System.Net.Http.Json;
-using System.Web;
+using Polly;
+using System.Diagnostics;
 
 namespace Oiski.School.THOP.Services
 {
@@ -48,7 +49,25 @@ namespace Oiski.School.THOP.Services
             var maxCount = ((options.MaxCount != null) ? ($"&MaxCount={options.MaxCount.Value}") : (null));
             var query = $"Sensor={options.Sensor}&LocationId={options.LocationId}{startTime ?? string.Empty}{endTime ?? string.Empty}{maxCount ?? string.Empty}";
 
-            List<HumidexDto> readings = await _client?.GetFromJsonAsync<List<HumidexDto>>($"thop/humidex?{query}")! ?? new List<HumidexDto>();
+            var attemptCounter = 0;
+            List<HumidexDto> readings = await Policy
+                .Handle<HttpRequestException>()
+                .WaitAndRetryAsync(retryCount: 5, sleepDurationProvider:
+                attempt =>
+                {
+                    attemptCounter = attempt;
+                    return TimeSpan.FromSeconds(Math.Pow(2, attempt));
+                },
+                onRetry: (ex, time) =>
+                {
+                    Debug.WriteLine($"An error occured (Attempt: {attemptCounter} - trying again in: {time}...): {ex}");
+                })
+                .ExecuteAsync(async () =>
+                {
+                    Debug.WriteLine("Fetching readings");
+
+                    return await _client?.GetFromJsonAsync<List<HumidexDto>>($"thop/humidex?{query}")! ?? new List<HumidexDto>();
+                });
 
             return readings;
         }
