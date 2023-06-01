@@ -8,8 +8,6 @@ using Oiski.School.THOP.Services.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSingleton<InfluxService>();
@@ -18,6 +16,7 @@ builder.Services.AddSingleton((provider) =>
     return new MyMQTTClient(Console.WriteLine);
 });
 builder.HookMQTTWorker();
+
 builder.Services.AddCors();
 
 var app = builder.Build();

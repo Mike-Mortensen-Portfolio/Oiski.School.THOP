@@ -34,15 +34,14 @@ namespace Oiski.School.THOP.Services
 
         public async Task<List<HumidexDto>> GetAllAsync(HumidexOptions options = null!)
         {
-            if (options == null)
-                options = new HumidexOptions
-                {
-                    Sensor = "",
-                    EndTime = null,
-                    StartTime = null,
-                    LocationId = "",
-                    MaxCount = null
-                };
+            options ??= new HumidexOptions
+            {
+                Sensor = "",
+                EndTime = null,
+                StartTime = null,
+                LocationId = "",
+                MaxCount = null
+            };
 
             var startTime = ((options.StartTime != null) ? ($"&StartTime={options.StartTime.Value.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture)}") : (null));
             var endTime = ((options.EndTime != null) ? ($"&EndTime={options.EndTime.Value.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture)}") : (null));
@@ -50,24 +49,32 @@ namespace Oiski.School.THOP.Services
             var query = $"Sensor={options.Sensor}&LocationId={options.LocationId}{startTime ?? string.Empty}{endTime ?? string.Empty}{maxCount ?? string.Empty}";
 
             var attemptCounter = 0;
-            List<HumidexDto> readings = await Policy
-                .Handle<HttpRequestException>()
-                .WaitAndRetryAsync(retryCount: 5, sleepDurationProvider:
-                attempt =>
-                {
-                    attemptCounter = attempt;
-                    return TimeSpan.FromSeconds(Math.Pow(2, attempt));
-                },
-                onRetry: (ex, time) =>
-                {
-                    Debug.WriteLine($"An error occured (Attempt: {attemptCounter} - trying again in: {time}...): {ex}");
-                })
-                .ExecuteAsync(async () =>
-                {
-                    Debug.WriteLine("Fetching readings");
+            List<HumidexDto> readings = new List<HumidexDto>();
+            try
+            {
+                readings = await Policy
+                   .Handle<HttpRequestException>()
+                   .WaitAndRetryAsync(retryCount: 5, sleepDurationProvider:
+                   attempt =>
+                   {
+                       attemptCounter = attempt;
+                       return TimeSpan.FromSeconds(Math.Pow(2, attempt));
+                   },
+                   onRetry: (ex, time) =>
+                   {
+                       Debug.WriteLine($"An error occured (Attempt: {attemptCounter} - trying again in: {time}...): {ex}");
+                   })
+                   .ExecuteAsync(async () =>
+                   {
+                       Debug.WriteLine("Fetching readings");
 
-                    return await _client?.GetFromJsonAsync<List<HumidexDto>>($"thop/humidex?{query}")! ?? new List<HumidexDto>();
-                });
+                       return await _client?.GetFromJsonAsync<List<HumidexDto>>($"thop/humidex?{query}")! ?? new List<HumidexDto>();
+                   });
+            }
+            catch (Exception)
+            {
+                Debug.WriteLine("Couldn't connect to server while fetching readings");
+            }
 
             return readings;
         }
