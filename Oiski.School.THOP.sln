@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Oiski.School.THOP.Api", "Oi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Oiski.School.THOP.Services", "Oiski.School.THOP.Services\Oiski.School.THOP.Services.csproj", "{7541B220-B853-414C-AAC2-395A822E85B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Oiski.School.THOP.Web", "Oiski.School.THOP.Web\Oiski.School.THOP.Web.csproj", "{1208F66D-C4DA-4169-A221-B01018BAFAC8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Oiski.School.THOP.Web", "Oiski.School.THOP.Web\Oiski.School.THOP.Web.csproj", "{1208F66D-C4DA-4169-A221-B01018BAFAC8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
