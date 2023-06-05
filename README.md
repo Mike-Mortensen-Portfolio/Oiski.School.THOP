@@ -153,8 +153,9 @@ This should remove the **Auth0** security, as there's not much security involved
 **Auth0** was to demonstrate the use and flow of a OIDC flow through the `Blazor Server` application.
 This can hardly be called security.
 
-**TL:DR: If you're super lazy just go to [v1.1.1-Rel](https://github.com/Mike-Mortensen-Portfolio/Oiski.School.THOP/releases/tag/v1.1.1-Rel).
-Security has been removed on that tag.**
+**TL:DR:** If you're super lazy just go to [v1.1.1-Rel](https://github.com/Mike-Mortensen-Portfolio/Oiski.School.THOP/releases/tag/v1.1.1-Rel),
+as security has been removed on that tag. Running the web application wihtout Auth0 also removes the need for
+the application to **not** run through a **Dev Tunnel**.
 
 <p align="right"><strong><a href="#introduction">^ To Top ^</a></strong></p>
 
