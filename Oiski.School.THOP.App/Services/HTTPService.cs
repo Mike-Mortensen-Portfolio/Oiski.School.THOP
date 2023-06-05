@@ -1,4 +1,6 @@
-﻿namespace Oiski.School.THOP.App.Services
+﻿using Oiski.School.THOP.Services;
+
+namespace Oiski.School.THOP.App.Services
 {
     /// <summary>
     /// A wrapper that exposes an <see cref="HttpClient"/>. Most likely only useful in the context of a <strong>.NET MAUI</strong> application

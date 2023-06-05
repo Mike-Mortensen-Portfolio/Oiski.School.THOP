@@ -17,10 +17,20 @@ The Mobile application will pull this data and display it using a graph (_See [a
 There's no inherent difference in flow between the mobile **MAUI Client** and the **Blazor Server** application,
 as shown on the [architecture](#thop-architecture) diagram below.
 
+*05/06/2023* - The final grade recieved for this project is **12 (A+)**. The Grade is calculated from 3 sub-grades, which are as follows:
+- **Embedded Controller (_IoT_) III:** 12 (A+)
+- **App Programming III:** 12 (A+)
+- **Serverside Programming III:** 12 (A+)
+
 ---
 
 ## Table of Contents
 - [Projects](#projects)
+- [Setup](#setup)
+    - [MAUI App](#maui-android-setup)
+    - [API](#api-setup)
+    - [Blazor Server](#blazor-server-setup)
+        - [Remove Auth0](#remove-auth0)
 - [THOP Architecture](#thop-architecture)
 - [THOP Sensor Circuit](#thop-sensor-circuit)
 - [Endpoints](#endpoints)
@@ -41,6 +51,112 @@ _All projects are prefixed with `Oiski.School.THOP`_
 | `Api` | <img style="vertical-align: bottom;" src="/Diagrams/Images/RestApi_Client.png" width="25px" /> .NET RESTApi | C# | | InfluxDB |
 | `Humidex` | <img style="vertical-align: bottom;" src="/Diagrams/Images/MKR1010_Client.png" width="25px" /> Arduino MKR WiFi 1010 | C++ | | `Api` |
 | `Web` | <img style="vertical-align: bottom;" src="/Diagrams/Images/MAUI_Client.png" width="25px" /> .NET Blazor Server | C#, JS, HTML, CSS | | `Api` |
+
+---
+
+## Setup
+
+### MAUI Android Setup
+The mobile application requires a **TUNNEL_URL** in [AppConstants](/Oiski.School.THOP.Services/AppConstants.cs) that
+targets the `API`. If the tunnel is not present the app will not be able to connect to the `API`.
+See [this](https://learn.microsoft.com/da-dk/aspnet/core/test/dev-tunnels?view=aspnetcore-7.0) article for information
+on how to establish and use **Dev Tunnels**.
+
+### API Setup
+The `API` must to run through a [Dev Tunnel](https://learn.microsoft.com/da-dk/aspnet/core/test/dev-tunnels?view=aspnetcore-7.0) as the `MAUI` Android application requires prober certification for it
+to be able to connect. This is a limitation from Android (_See [Connect to local web services](https://learn.microsoft.com/en-us/dotnet/maui/data-cloud/local-web-services) for more information_).
+
+#### User Secrets
+The following **User Secrets** are required for the API to function as intended:
+```json
+{
+  "HiveMQ": {
+    "Broker": "<Broker_Url>",
+    "Credentials": {
+      "Username": "<Client_Username>",
+      "Password": "<Client_Password>"
+    }
+  },
+  "Influx": {
+    "BucketName": "<Bucket_Name>",
+    "OrgId": "<Organization_Id>",
+    "Url": "<Bucket_Url>",
+    "Token": "<Bucket_Token>"
+  }
+}
+```
+
+Addtionally the API requires the following [App Settings](/Oiski.School.THOP.Api/appsettings.json):
+```json
+{
+  "Subs": [
+    {
+      "Topic": "+/+/climate",
+      "QoS": "1"
+    }
+  ],
+  "Pubs": {
+    "HomeWindow": {
+      "Topic": "home/window",
+      "QoS": "1"
+    }
+  }
+}
+```
+
+#### Blazor Server Setup
+The Web application uses **Auth0** to secure (_Although only to demonstrate the flow_) and requires the follwing
+**User Secrets** to function as intended:
+```json
+{
+  "Securiy": {
+    "Domain": "<Auth0_Domain>",
+    "ClientId": "<Auth0_Client_Secret>"
+  }
+}
+```
+
+For information about how to setup the **Auth0** credentials see [Creating the Auth0 application](https://auth0.com/blog/what-is-blazor-tutorial-on-building-webapp-with-authentication/#Securing-the-Application-with-Auth0).
+
+Addtionally the web client requires a **TUNNEL_URL** in [AppConstants](/Oiski.School.THOP.Services/AppConstants.cs) that
+targets the `API`. If the tunnel is not present the client will not be able to connect to the `API`.
+See [this](https://learn.microsoft.com/da-dk/aspnet/core/test/dev-tunnels?view=aspnetcore-7.0) article for information
+on how to establish and use **Dev Tunnels**.
+The `Blazor Server` application itself should not run through a **Dev Tunnel**, especially if **Auth0** security is
+used, as **Dev Tunnels** are not supported by **Auth0**.
+
+#### Remove Auth0
+To run the web application without **Auth0** do the following:
+1. Go to [Program](/Oiski.School.THOP.Web/Program.cs) and remove the line 1 `#define USE_AUTH0`
+1. Go to [App](/Oiski.School.THOP.Web/App.razor) and comment out this snippet
+    ```html
+     <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+        <Authorizing>
+            <p>Determining session state, please wait...</p>
+        </Authorizing>
+        <NotAuthorized>
+            <h1>Sorry</h1>
+            <p>You're not authorized to reach this page. You need to log in.</p>
+        </NotAuthorized>
+    </AuthorizeRouteView>
+    ```
+    and replace it with this:
+    ```html
+    <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+    ```
+1. Go to [MainLayout](/Oiski.School.THOP.Web/Shared/MainLayout.razor) and remove line 7-8 and 12-13.
+   Also remove line 17 `<AccessControl />`
+1. Go to [Overview](/Oiski.School.THOP.Web/Pages/OverView.razor) and remove line 3 `@attribute [Authorize]`
+1. Go to [Analytics](/Oiski.School.THOP.Web/Pages/Analytics.razor) and remove line 2 `@attribute [Authorize]`
+
+This should remove the **Auth0** security, as there's not much security involved. The main reason for the presence of
+**Auth0** was to demonstrate the use and flow of a OIDC flow through the `Blazor Server` application.
+This can hardly be called security.
+
+**TL:DR: If you're super lazy just go to [v1.1.1-Rel](https://github.com/Mike-Mortensen-Portfolio/Oiski.School.THOP/releases/tag/v1.1.1-Rel).
+Security has been removed on that tag.**
+
+<p align="right"><strong><a href="#introduction">^ To Top ^</a></strong></p>
 
 ---
 
