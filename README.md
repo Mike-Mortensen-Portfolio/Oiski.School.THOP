@@ -63,7 +63,7 @@ See [this](https://learn.microsoft.com/da-dk/aspnet/core/test/dev-tunnels?view=a
 on how to establish and use **Dev Tunnels**.
 
 ### API Setup
-The `API` must to run through a [Dev Tunnel](https://learn.microsoft.com/da-dk/aspnet/core/test/dev-tunnels?view=aspnetcore-7.0) as the `MAUI` Android application requires prober certification for it
+The `API` must run through a [Dev Tunnel](https://learn.microsoft.com/da-dk/aspnet/core/test/dev-tunnels?view=aspnetcore-7.0) as the `MAUI` Android application requires prober certification for it
 to be able to connect. This is a limitation from Android (_See [Connect to local web services](https://learn.microsoft.com/en-us/dotnet/maui/data-cloud/local-web-services) for more information_).
 
 #### User Secrets
@@ -116,7 +116,7 @@ The Web application uses **Auth0** to secure (_Although only to demonstrate the 
 }
 ```
 
-For information about how to setup the **Auth0** credentials see [Creating the Auth0 application](https://auth0.com/blog/what-is-blazor-tutorial-on-building-webapp-with-authentication/#Securing-the-Application-with-Auth0).
+For more information about how to set up the **Auth0** credentials, see [Creating the Auth0 application](https://auth0.com/blog/what-is-blazor-tutorial-on-building-webapp-with-authentication/#Securing-the-Application-with-Auth0).
 
 Addtionally the web client requires a **TUNNEL_URL** in [AppConstants](/Oiski.School.THOP.Services/AppConstants.cs) that
 targets the `API`. If the tunnel is not present the client will not be able to connect to the `API`.
@@ -127,7 +127,7 @@ used, as **Dev Tunnels** are not supported by **Auth0**.
 
 #### Remove Auth0
 To run the web application without **Auth0** do the following:
-1. Go to [Program](/Oiski.School.THOP.Web/Program.cs) and remove the line 1 `#define USE_AUTH0`
+1. Go to [Program](/Oiski.School.THOP.Web/Program.cs) and remove line 1: `#define USE_AUTH0`
 1. Go to [App](/Oiski.School.THOP.Web/App.razor) and comment out this snippet
     ```html
      <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
@@ -145,16 +145,21 @@ To run the web application without **Auth0** do the following:
     <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
     ```
 1. Go to [MainLayout](/Oiski.School.THOP.Web/Shared/MainLayout.razor) and remove line 7-8 and 12-13.
-   Also remove line 17 `<AccessControl />`
-1. Go to [Overview](/Oiski.School.THOP.Web/Pages/OverView.razor) and remove line 3 `@attribute [Authorize]`
-1. Go to [Analytics](/Oiski.School.THOP.Web/Pages/Analytics.razor) and remove line 2 `@attribute [Authorize]`
+   Also remove line 17: `<AccessControl />`
+1. Go to [Overview](/Oiski.School.THOP.Web/Pages/OverView.razor) and remove line 3: `@attribute [Authorize]`
+1. Go to [Analytics](/Oiski.School.THOP.Web/Pages/Analytics.razor) and remove line 2: `@attribute [Authorize]`
 
 This should remove the **Auth0** security, as there's not much security involved. The main reason for the presence of
-**Auth0** was to demonstrate the use and flow of a OIDC flow through the `Blazor Server` application.
+**Auth0** was to demonstrate the use of an OIDC flow through the `Blazor Server` application.
 This can hardly be called security.
 
-**TL:DR: If you're super lazy just go to [v1.1.1-Rel](https://github.com/Mike-Mortensen-Portfolio/Oiski.School.THOP/releases/tag/v1.1.1-Rel).
-Security has been removed on that tag.**
+**TL:DR:** If you're super lazy just go to [v1.1.1-Rel](https://github.com/Mike-Mortensen-Portfolio/Oiski.School.THOP/releases/tag/v1.1.1-Rel),
+as security has been removed on that tag. Running the web application without Auth0 also removes the need for
+the application to **not** run through a **Dev Tunnel**, which means the application can, altough it doesn't have to,
+run through a **Dev Tunnel**.
+
+**Keep in mind** that the tag is not maintained and could be several commits behind and
+therefore not include potential new features or bug fixes.
 
 <p align="right"><strong><a href="#introduction">^ To Top ^</a></strong></p>
 
@@ -423,6 +428,9 @@ true
 ---
 
 ## Change Log
+- **[v1.1.2-Dev](https://github.com/Mike-Mortensen-Portfolio/Oiski.School.THOP/releases/tag/v1.1.2-Dev)**
+    - **Added**
+        - New App Icon
 - **[v1.1.1-Dev](https://github.com/Mike-Mortensen-Portfolio/Oiski.School.THOP/releases/tag/v1.1.1-Dev)**
     - **Added**
         - Auth0 authentication
