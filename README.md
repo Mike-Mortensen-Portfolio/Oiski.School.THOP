@@ -423,6 +423,10 @@ true
 ---
 
 ## Change Log
+- **[v1.1.1-Dev](https://github.com/Mike-Mortensen-Portfolio/Oiski.School.THOP/releases/tag/v1.1.1-Dev)**
+    - **Added**
+        - Auth0 authentication
+        - Refactoring and code cleanup
 - **[v1.1.0-Dev](https://github.com/Mike-Mortensen-Portfolio/Oiski.School.THOP/releases/tag/v1.1.0-Dev)**
     - **Added**
         - Blazor server project as web solution (_`Oiski.School.THOP.Web`_)
