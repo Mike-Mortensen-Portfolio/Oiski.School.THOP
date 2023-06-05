@@ -50,7 +50,7 @@ _All projects are prefixed with `Oiski.School.THOP`_
 | `App` | <img style="vertical-align: bottom;" src="/Diagrams/Images/MAUI_Client.png" width="25px" /> NET MAUI | C#, XAML | _22.05.23_ - _24.05.23_ | `Api` |
 | `Api` | <img style="vertical-align: bottom;" src="/Diagrams/Images/RestApi_Client.png" width="25px" /> .NET RESTApi | C# | | InfluxDB |
 | `Humidex` | <img style="vertical-align: bottom;" src="/Diagrams/Images/MKR1010_Client.png" width="25px" /> Arduino MKR WiFi 1010 | C++ | | `Api` |
-| `Web` | <img style="vertical-align: bottom;" src="/Diagrams/Images/MAUI_Client.png" width="25px" /> .NET Blazor Server | C#, JS, HTML, CSS | | `Api` |
+| `Web` | <img style="vertical-align: bottom;" src="/Diagrams/Images/MAUI_Client.png" width="25px" /> .NET Blazor Server | C#, JS, HTML, CSS |  _25.05.23_ - _01.06.23_ | `Api` |
 
 ---
 
