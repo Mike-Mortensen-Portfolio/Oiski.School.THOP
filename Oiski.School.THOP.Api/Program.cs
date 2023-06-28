@@ -35,6 +35,7 @@ app.UseCors(options =>
     options.AllowAnyOrigin();
 });
 
+#region Endpoints
 var thopEndpoints = app.MapGroup("thop/");
 
 thopEndpoints.MapGet("humidex", async ([AsParameters] HumidexFilter filter, InfluxService service) =>
@@ -44,36 +45,6 @@ thopEndpoints.MapGet("humidex", async ([AsParameters] HumidexFilter filter, Infl
 
     if (filter.StartTime != null && filter.EndTime != null && filter.StartTime > filter.EndTime)
         return Results.BadRequest(new { Error = "Start time can't be higher than end time" });
-
-    #region Seed
-    //IEnumerable<HumidexDTO> data = new List<HumidexDTO>
-    //{
-    //    new HumidexDTO
-    //    {
-    //        Humidity = 60.2,
-    //        LocationId = "home",
-    //        Sensor = "DHT11",
-    //        Temperature = 22.5,
-    //        Time = DateTime.Parse ("2023-05-19T16:00:00.0004Z")
-    //    },
-    //    new HumidexDTO
-    //    {
-    //        Humidity = 67,
-    //        LocationId = "home",
-    //        Sensor = "DHT11",
-    //        Temperature = 25.5,
-    //        Time = DateTime.Parse ("2023-05-22T17:00:00.000Z")
-    //    },
-    //    new HumidexDTO
-    //    {
-    //        Humidity = 50.2,
-    //        LocationId = "home",
-    //        Sensor = "DHT11",
-    //        Temperature = 19.5,
-    //        Time = DateTime.Parse ("2023-05-22T18:00:00.000Z")
-    //    }
-    //}
-    #endregion
 
     IEnumerable<HumidexDto> data = await Task.FromResult(
      service.Read<HumidexDto>()
@@ -132,11 +103,13 @@ thopEndpoints.MapPost("light", async ([FromBody] StateOptions options, MyMQTTCli
     });
 });
 
+//  The only use for this endpoint is to simulate an error
 thopEndpoints.MapGet("killHumidex", () =>
 {
     ManualError.ErrorThrow = !ManualError.ErrorThrow;
 
     return Results.Ok(ManualError.ErrorThrow);
 });
+#endregion
 
 app.Run();
