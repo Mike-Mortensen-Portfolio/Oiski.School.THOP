@@ -221,7 +221,7 @@ true
 {
     "locationId": "home",
     "deviceId":"ArduinoMKR1010",
-    "on": "on"
+    "lights": "on"
 }
 ```
 
@@ -246,6 +246,78 @@ true
 </td>
 <td>
     The stream of Humidity and Temperature data for the &lt;<i>deviceId</i>&gt; at &lt;<i>locationId</i>&gt;
+</td>
+</tr>
+</tbody>
+</table>
+
+<p align="right"><strong><a href="#introduction">^ To Top ^</a></strong></p>
+
+---
+
+## Peripherals
+<table>
+    <thead>
+        <tr>
+            <th>Peripheral</th>
+            <th>Specifier</th>
+            <th>Values</th>
+            <th>Sample</th>
+        </tr>
+    </thead>
+<tbody>
+<tr>
+<td>
+    LED
+</td>
+<td>
+    lights
+</td>
+<td>
+    on/off
+</td>
+<td>
+
+```json
+{
+    "locationId": "home",
+    "deviceId":"ArduinoMKR1010",
+    "lights": "on"
+}
+```
+
+</td>
+</tr>
+<tr>
+<td>
+    Servo
+</td>
+<td>
+    vents
+</td>
+<td>
+    on/off
+</td>
+<td>
+
+```json
+{
+    "locationId": "home",
+    "deviceId":"ArduinoMKR1010",
+    "vents": "on"
+}
+```
+
+</td>
+</tr>
+<tr>
+<td>
+    DHT11
+</td>
+<td></td>
+<td></td>
+<td>
+    <i>This peripheral is publishing data only</i>
 </td>
 </tr>
 </tbody>
