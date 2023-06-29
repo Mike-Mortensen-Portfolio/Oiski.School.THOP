@@ -20,9 +20,9 @@ namespace Oiski.School.THOP.Api.Services.MQTT
         {
             _logger = logger;
 
-            _broker = configuration["HiveMQ:Broker"]!;
-            _username = configuration["HiveMQ:Credentials:Username"]!;
-            _password = configuration["HiveMQ:Credentials:Password"]!;
+            _broker = configuration["RabbitMQ:Broker"]!;
+            _username = configuration["RabbitMQ:Credentials:Username"]!;
+            _password = configuration["RabbitMQ:Credentials:Password"]!;
             _subs = configuration
                 .GetSection("Subs")
                 .Get<List<TopicData>>()!;
@@ -39,7 +39,7 @@ namespace Oiski.School.THOP.Api.Services.MQTT
         /// <returns>The <see cref="Task"/> that represents the asynchronous operation</returns>
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            var resultCode = await _client.ConnectWithTLS(_broker, _username, _password);
+            var resultCode = await _client.Connect(_broker, _username, _password);
             if (resultCode != MqttClientConnectResultCode.Success)
                 _logger.LogInformation("{resultCode}", resultCode.ToString());
 

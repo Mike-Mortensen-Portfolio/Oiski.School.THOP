@@ -47,13 +47,17 @@ namespace Oiski.School.THOP.Api.Services.MQTT
         /// <param name="broker"></param>
         /// <returns></returns>
         /// <exception cref="NullReferenceException"></exception>
-        public async Task<MqttClientConnectResultCode> Connect(string broker)
+        public async Task<MqttClientConnectResultCode> Connect(string broker, string username = null!, string password = null!)
         {
             if (_client == null)
                 throw new NullReferenceException("Client can't be null");
 
-            var mqttClientOptions = new MqttClientOptionsBuilder()
-                .WithTcpServer(broker)
+            var mqttClientbuilder = new MqttClientOptionsBuilder()
+                .WithTcpServer(broker);
+            if (username != null && password != null)
+                mqttClientbuilder
+                .WithCredentials(username, password);
+            var mqttClientOptions = mqttClientbuilder
                 .Build();
 
             _logger?.Invoke($"Connecting to: {broker}...");

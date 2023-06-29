@@ -12,7 +12,7 @@ unsigned int intervalInMili = 120000;
 unsigned int retryIntervalInMili = 5000;
 
 //  Networking
-WiFiSSLClient wifiClient;
+WiFiClient wifiClient;
 MqttClient mqttClient(wifiClient);
 
 ////////// WiFi /////////
@@ -23,7 +23,7 @@ char pass[] = SECRET_PASS;
 const char username[] = SECRET_USERNAME;
 const char token[] = SECRET_TOKEN;
 const char broker[] = SECRET_BROKER;
-const int port = 8883;
+const int port = 1883;
 const char locationId[] = "home";
 const char clientId[] = "oiski_1010";
 const String topics[] = {locationId + String ("/") + clientId};
@@ -54,7 +54,7 @@ void setup()
   pinMode (led_pin, OUTPUT);
   servo.attach (servo_pin);
   Serial.begin (9600);
-  // while (!Serial) ; //  Wait for serial to connect
+  while (!Serial) ; //  Wait for serial to connect
 
   mqttClient.setId(clientId);
   mqttClient.setUsernamePassword(username, token);
@@ -120,7 +120,10 @@ void connectMQTT ()
 
   while (!mqttClient.connect (broker, port))
   {
-    Serial.print ("-");
+    int status = mqttClient.connectError();
+    Serial.print ("-[");
+    Serial.print (status);
+    Serial.print ("]-");
     delay (retryIntervalInMili);
   }
   

@@ -1,4 +1,3 @@
-#define USE_AUTH0
 using Oiski.School.THOP.Web.Services;
 #if USE_AUTH0
 using Auth0.AspNetCore.Authentication;
@@ -15,7 +14,7 @@ builder.Services.AddScoped<HumidexServiceScope>();
 builder.Services.AddScoped<PeripheralServiceScope>();
 builder.Services.AddHttpClient("THOP_Api", client =>
 {
-    client.BaseAddress = new Uri(AppConstants.TUNNEL_URL);    //  Api uses a Dev Tunnel
+    client.BaseAddress = new Uri("http://10.135.16.57:8080/");    //  Api uses a Dev Tunnel
 });
 #if USE_AUTH0
 builder.Services.AddAuth0WebAppAuthentication(options =>
