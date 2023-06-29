@@ -22,6 +22,11 @@ as shown on the [architecture](#thop-architecture) diagram below.
 - **App Programming III:** 12 (A+)
 - **Serverside Programming III:** 12 (A+)
 
+*29/06/2023* - Added Docker support and prepared the codebase for hosting on a Raspberry Pie.
+The API doesn't run through a tunnel on this branch, and it doesn't work together with the app for that reason.
+It's possible to set up [ngrok](https://ngrok.com/), however, this is not something I wanted to do.
+Check out the [Docker Setup](#docker-setup) section for how to set up the envrionment.  
+
 ---
 
 ## Table of Contents
@@ -33,6 +38,7 @@ as shown on the [architecture](#thop-architecture) diagram below.
         - [Remove Auth0](#remove-auth0)
 - [THOP Architecture](#thop-architecture)
 - [THOP Sensor Circuit](#thop-sensor-circuit)
+- [Docker Setup](#docker-setup)
 - [Endpoints](#endpoints)
 - [Topics](#topics)
 - [Features](#requirements)
@@ -205,6 +211,51 @@ The API and board also supports control of an LED, however, this is not shown on
 as the peripheral is not necessary or important in order for the system to serve its purpose.
 The endpoints and functionality, however, are implemented in both the API and on the board,
 as well as in the mobile application.
+
+<p align="right"><strong><a href="#introduction">^ To Top ^</a></strong></p>
+
+---
+
+## Docker Setup
+The entire ecosystem supports Docker, however, the Android app does not in this setup, unless
+something like [ngrok](https://ngrok.com/) is set up.
+
+You can set up your own broker, however, this guide will focus on using **RabbitMQ** and **InfluxDB**.
+This guide also assumes that you know how to install and deploy a Raspberry pie.
+
+1. Install docker by running the following commands:
+    1. `sudo apt install docker docker.io docker-compose`
+    1. `sudo systemctl start docker`
+    1. `sudo usermod -a -G docker <username>`
+    1. `sudo reboot`
+    1. Make sure it's installed correctly: `docker ps`
+1. Install RabbitMQ by running these commands:
+    1. `docker run -it -d  --name rabbitmq -p 5672:5672 -p 15672:15672 -p 1883:1883 rabbitmq:3.9-management`
+    1. `docker exec -it rabbitmq bash`
+    1. `rabbitmq-plugins enable rabbitmq_mqtt`
+    1. Get the IP for your Raspberry: `ip -c address`
+1. Install InfluxDB: `docker run -d -p 8086:8086 -v influxdb:/var/lib/influxdb -v influxdb2:/var/lib/influxdb2 influxdb:2.0`
+1. Setup the [appsettings.json](/Oiski.School.THOP.Api/appsettings.json) of the API
+    ```json
+      "RabbitMQ": {
+        "Credentials": {
+          "Username": "guest",
+          "Password": "guest"
+        },
+        "Broker": "<Raspberry_IP>"
+      },
+      "Influx": {
+        "Url": "http://<Raspberry_IP>:8086/",
+        "Token": "<Influx_Token>",
+        "OrgId": "<Influx_OrgId>",
+        "BucketName": "<Influx_Bucket_Name>"
+      }
+    ```
+1. Now upload the solution to the Raspberry (_You can use [WinSCP](https://winscp.net/eng/download.php)_)
+1. Build the API docker project by running: `docker build -t api:latest -f <FilePathToDockerFile>`
+1. Build the Web Docker project by running: `docker build -t web:latest -f <FileToDockerFile>`
+1. Boot up the api: `docker run -p 8080:80 api:latest`
+1. Boot up the web application: `docker run -p 8081:80 web:latest`
 
 <p align="right"><strong><a href="#introduction">^ To Top ^</a></strong></p>
 
@@ -500,6 +551,14 @@ true
 ---
 
 ## Change Log
+- **[v1.2.0-Dev](https://github.com/Mike-Mortensen-Portfolio/Oiski.School.THOP/releases/tag/v1.2.0-Dev)**
+    - **Added**
+        - Docker support for `API` and `Web` project
+    - **Changed**
+        - Moved some settings from `User Secrets` to `appsettings.json`
+        - Switched `WiFiSSLClient` out with `WiFiClient` in the embedded `C++` program.
+    - **Removed**
+        - `Auth0` support 
 - **[v1.1.2-Dev](https://github.com/Mike-Mortensen-Portfolio/Oiski.School.THOP/releases/tag/v1.1.2-Dev)**
     - **Added**
         - New App Icon
