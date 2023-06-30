@@ -22,7 +22,7 @@ as shown on the [architecture](#thop-architecture) diagram below.
 - **App Programming III:** 12 (A+)
 - **Serverside Programming III:** 12 (A+)
 
-*29/06/2023* - Added Docker support and prepared the codebase for hosting on a Raspberry Pie.
+*29/06/2023* - Added Docker support and prepared the codebase for hosting on a Raspberry PI.
 The API doesn't run through a tunnel on this branch, and it doesn't work together with the app for that reason.
 It's possible to set up [ngrok](https://ngrok.com/), however, this is not something I wanted to do.
 Check out the [Docker Setup](#docker-setup) section for how to set up the envrionment.  
@@ -220,7 +220,7 @@ as well as in the mobile application.
 The entire ecosystem supports Docker, however, the Android app does not
 in this setup, unless something like [ngrok](https://ngrok.com/) is set up,
 which this guide will not explain how to do.
-The setup is there to demonstrate Docker and hosting via a Raspberry Pie.
+The setup is there to demonstrate Docker and hosting via a Raspberry PI.
 It's part of my 5th year examn in **Linux aimed at Server and Embedded**.
 
 You can set up your own broker and DB solution, however, this guide will focus on using **RabbitMQ** and **InfluxDB**.
@@ -228,14 +228,14 @@ This guide will first install and deploy the Raspberry and then install docker.
 We'll then move on to installing RabbitMQ and InfluxDB and finnish off by setting
 the `API` and `Web` projects up for deployment, as well as deploy and run them.
 
-### Install and Deploy Raspberry Pie
+### Install and Deploy Raspberry PI
 If you're on Windows you can use this command: *`winget install -e --id RaspberryPiFoundation.RaspberryPiImager`*
 in a CMD prompt to install the Raspberry Pi Imager, or if you're on Linux: _`sudo apt install rpi-imager`_.
 You can also go to [Raspberrypi.com](https://www.raspberrypi.com/software/)
 and download the software manually.
 
 #### Image configuration
-- **Operation System:** Raspberry Pi Lite (64)
+- **Operation System:** Raspberry PI Lite (64)
 - **Choose Storage:** &lt;_Choose your storage device_&gt;
 - Go into settings (_Lower Right corner_) and put the following:
     - Enable and **Set hostname:** &lt;_Choose your hostname_&gt;
