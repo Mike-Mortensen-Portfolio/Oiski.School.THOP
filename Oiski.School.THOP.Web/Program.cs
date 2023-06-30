@@ -14,7 +14,8 @@ builder.Services.AddScoped<HumidexServiceScope>();
 builder.Services.AddScoped<PeripheralServiceScope>();
 builder.Services.AddHttpClient("THOP_Api", client =>
 {
-    client.BaseAddress = new Uri("http://10.135.16.57:8080/");    //  Api uses a Dev Tunnel
+    IConfiguration configuration = builder.Configuration;
+    client.BaseAddress = new Uri(configuration["APIAddress"]!);
 });
 #if USE_AUTH0
 builder.Services.AddAuth0WebAppAuthentication(options =>

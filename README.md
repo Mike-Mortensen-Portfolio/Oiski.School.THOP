@@ -217,24 +217,70 @@ as well as in the mobile application.
 ---
 
 ## Docker Setup
-The entire ecosystem supports Docker, however, the Android app does not in this setup, unless
-something like [ngrok](https://ngrok.com/) is set up.
+The entire ecosystem supports Docker, however, the Android app does not
+in this setup, unless something like [ngrok](https://ngrok.com/) is set up,
+which this guide will not explain how to do.
+The setup is there to demonstrate Docker and hosting via a Raspberry Pie.
+It's part of my 5th year examn in **Linux aimed at Server and Embedded**.
 
-You can set up your own broker, however, this guide will focus on using **RabbitMQ** and **InfluxDB**.
-This guide also assumes that you know how to install and deploy a Raspberry pie.
+You can set up your own broker and DB solution, however, this guide will focus on using **RabbitMQ** and **InfluxDB**.
+This guide will first install and deploy the Raspberry and then install docker.
+We'll then move on to installing RabbitMQ and InfluxDB and finnish off by setting
+the `API` and `Web` projects up for deployment, as well as deploy and run them.
 
-1. Install docker by running the following commands:
-    1. `sudo apt install docker docker.io docker-compose`
-    1. `sudo systemctl start docker`
-    1. `sudo usermod -a -G docker <username>`
-    1. `sudo reboot`
-    1. Make sure it's installed correctly: `docker ps`
+### Install and Deploy Raspberry Pie
+If you're on Windows you can use this command: *`winget install -e --id RaspberryPiFoundation.RaspberryPiImager`*
+in a CMD prompt to install the Raspberry Pi Imager, or if you're on Linux: _`sudo apt install rpi-imager`_.
+You can also go to [Raspberrypi.com](https://www.raspberrypi.com/software/)
+and download the software manually.
+
+#### Image configuration
+- **Operation System:** Raspberry Pi Lite (64)
+- **Choose Storage:** &lt;_Choose your storage device_&gt;
+- Go into settings (_Lower Right corner_) and put the following:
+    - Enable and **Set hostname:** &lt;_Choose your hostname_&gt;
+    - Enable and **Set username and password:**  &lt;_Choose your credentials_&gt;
+    - Enable **Configure wireless LAN** and make sure it's set to the same network as your PC
+    - Make sure **Enable Telemetry** is disabled
+    - Save settings
+- Now **Write** the image and deploy it on the device
+- SSH into your raspberry by typing _`ssh pi@<HostName>.local`_
+- Type: _`sudo apt update`_ followed by _`sudo apt upgrade`_ to conclude the installation
+
+### Install Docker
+1. Install Docker by running the following commands:
+    1. Install Docker: _`sudo apt install docker docker.io docker-compose`_
+    1. Start Docker with: _`sudo systemctl start docker`_
+    1. Grant access by: _`sudo usermod -a -G docker <username>`_
+    1. Reboot the device: _`sudo reboot`_
+    1. Make sure it's installed correctly: _`docker ps`_. You should see somehting like:
+    ```
+        CONTAINER ID     IMAGE   COMMAND   CREATED    STATUS   PORTS   NAMES
+    ```
+
+### Install RabbitMQ
 1. Install RabbitMQ by running these commands:
-    1. `docker run -it -d  --name rabbitmq -p 5672:5672 -p 15672:15672 -p 1883:1883 rabbitmq:3.9-management`
-    1. `docker exec -it rabbitmq bash`
-    1. `rabbitmq-plugins enable rabbitmq_mqtt`
-    1. Get the IP for your Raspberry: `ip -c address`
-1. Install InfluxDB: `docker run -d -p 8086:8086 -v influxdb:/var/lib/influxdb -v influxdb2:/var/lib/influxdb2 influxdb:2.0`
+    1. *`docker run -it -d  --name rabbitmq -p 5672:5672 -p 15672:15672 -p 1883:1883 rabbitmq:3.9-management`*
+    1. *`docker exec -it rabbitmq bash`*
+    1. *`rabbitmq-plugins enable rabbitmq_mqtt`*
+    1. Get the IP for your Raspberry: *`ip -c address`*
+
+### Install InfluxDB
+1. Install InfluxDB: *`docker run -d -p 8086:8086 -v influxdb:/var/lib/influxdb -v influxdb2:/var/lib/influxdb2 influxdb:2.0`*
+
+### Setup Embedded Circuit
+The embedded code is already set up and ready, however,
+you need to change the **SECRET_SSID**, **SECRET_PASS** and **SECRET_BROKER** in [arduino_secrets.h](/Oiski.School.THOP.Humidex/include/arduino_secrets.h)
+```c++
+#define SECRET_SSID "<WiFi_SSID>"
+#define SECRET_PASS "<WiFi_Password>"
+
+#define SECRET_BROKER "<Raspberry_IP>"
+#define SECRET_USERNAME "guest"
+#define SECRET_TOKEN "guest"
+```
+
+### Setup and Deploy Projects
 1. Setup the [appsettings.json](/Oiski.School.THOP.Api/appsettings.json) of the API
     ```json
       "RabbitMQ": {
@@ -251,11 +297,15 @@ This guide also assumes that you know how to install and deploy a Raspberry pie.
         "BucketName": "<Influx_Bucket_Name>"
       }
     ```
+1. Setup the [appsettings.json](/Oiski.School.THOP.Web/appsettings.json) of the Web project
+    ```json
+      "APIAddess": "http://<Raspberry_IP>:8080/"
+    ```
 1. Now upload the solution to the Raspberry (_You can use [WinSCP](https://winscp.net/eng/download.php)_)
-1. Build the API docker project by running: `docker build -t api:latest -f <FilePathToDockerFile>`
-1. Build the Web Docker project by running: `docker build -t web:latest -f <FileToDockerFile>`
-1. Boot up the api: `docker run -p 8080:80 api:latest`
-1. Boot up the web application: `docker run -p 8081:80 web:latest`
+1. Build the API docker project by running: *`docker build -t api:latest -f <FilePathToDockerFile>`*
+1. Build the Web Docker project by running: *`docker build -t web:latest -f <FileToDockerFile>`*
+1. Boot up the api: *`docker run -p 8080:80 api:latest`*
+1. Boot up the web application: *`docker run -p 8081:80 web:latest`*
 
 <p align="right"><strong><a href="#introduction">^ To Top ^</a></strong></p>
 
